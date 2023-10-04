@@ -11,7 +11,6 @@ import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 
 // Import Material UI Components 
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -360,7 +359,7 @@ export default function Home(){
         name="name"
         type="text"
         label="Name"
-        variant="outlined"
+        variant="standard"
         fullWidth
         margin="normal"
         as={TextField}
@@ -372,7 +371,7 @@ export default function Home(){
         name="email"
         type="text"
         label="Email"
-        variant="outlined"
+        variant="standard"
         fullWidth
         margin="normal"
         as={TextField}
@@ -384,7 +383,7 @@ export default function Home(){
         name="phone_number"
         type="text"
         label="Phone Number"
-        variant="outlined"
+        variant="standard"
         fullWidth
         margin="normal"
         as={TextField}
@@ -396,7 +395,7 @@ export default function Home(){
         name="message"
         type="text"
         label="Briefly describe the services you need"
-        variant="outlined"
+        variant="standard"
         fullWidth
         margin="normal"
         multiline
@@ -410,7 +409,12 @@ export default function Home(){
     <Button
         type="submit"
         variant="contained"
-        style={{ backgroundColor: '#5c210a', padding: 10, marginTop: 10 }}
+        style={{
+          color: 'white',
+          backgroundColor: isSubmitting || !isValid || !dirty ? 'grey' : '#5c210a',
+          padding: 10,
+          marginTop: 10,
+      }}
         disabled={isSubmitting || !isValid || !dirty}
       >
         {isSubmitting ? (

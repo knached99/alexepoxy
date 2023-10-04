@@ -19,7 +19,6 @@ import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 const drawerWidth = 240;
-const navItems = ['Home', 'About Us', 'Photo Gallery',  'Contact Us'];
 
 function DrawerAppBar(props) {
   const { window, auth } = props;
@@ -36,13 +35,7 @@ function DrawerAppBar(props) {
       </Typography>
       <Divider />
       <List>
-        {/* {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))} */}
+        
         <Link to="#" className="block p-5 py-2 pr-4 pl-3">
         Home 
         </Link>
@@ -103,11 +96,7 @@ function DrawerAppBar(props) {
              Alex's Epoxy
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {/* {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
-            ))} */}
+           
             <Tooltip title="Home">
             <Link to="#" className="p-5 py-2 pr-4 pl-3">
             <HomeOutlinedIcon sx={{ color: '#fff' }} />
