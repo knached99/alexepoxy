@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ContactSubmissionsModel;
-
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NotifyContactSubmitted;
+use Illuminate\Notifications\NotificationException;
 class Home extends Controller
 {
     public function submitContactForm(Request $request)
@@ -41,12 +43,16 @@ class Home extends Controller
             try {
                 // Create record in the database
                 ContactSubmissionsModel::create($data);
+                Notification::route('mail', env('MAIL_FROM_ADDRESS'))->notify(new NotifyContactSubmitted($data));
 
                 // Return success response
                 return response()->json(['success' => 'Alex Epoxy has been notified and will reach out to your email ' . $data['email'] . ' soon!']);
             } catch (\Exception $e) {
                 // Return error response
-                return response()->json(['error' => $e->getMessage()], 500);
+                return response()->json(['error' => 'Something went wrong submitting this form'], 500);
+            }
+            catch(NotificationException $e){
+                return response()->json(['error' => 'Something went wrong sending an email to the business'], 500);
             }
         }
 

@@ -33,7 +33,6 @@ import '../../css/lightBox.css';
 
 
 export default function Home(){
-  const [responseMessage, setResponseMessage] = useState(null);
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -41,6 +40,17 @@ export default function Home(){
     message: Yup.string().required('Message is required'),
   });
 
+  const initialFormValues = {
+    name: '',
+    email: '',
+    phone_number: '',
+    message: '',
+  };
+
+  // const resetFormValues = () => {
+  //   // Set form values to their initial state
+  //   setValues(initialFormValues);
+  // };
      
   const handleToast = (type, message) => {
     switch (type) {
@@ -65,6 +75,8 @@ export default function Home(){
 
       if (response.data.success) {
         handleToast('success', response.data.success);
+         // Reset the form values
+        
       } else {
         handleToast('error', response.data.error);
       }
@@ -328,7 +340,7 @@ export default function Home(){
                 autoComplete="off"
                 > */}
   <Formik
-  initialValues={{ name: '', email: '', phone_number: '', message: '' }}
+  initialValues={initialFormValues}
   validationSchema={validationSchema}
   onSubmit={handleSubmit}
 >
@@ -412,11 +424,7 @@ export default function Home(){
     </Form>
   )}
 </Formik>
-    {/* {responseMessage && (
-        <div>
-          <p className="mt-4 font-bold">{responseMessage}</p>
-        </div>
-      )} */}
+
       <ToastContainer/>
 
             </div>
