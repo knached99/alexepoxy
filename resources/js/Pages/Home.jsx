@@ -8,18 +8,72 @@ import HandshakeOutlinedIcon from '@mui/icons-material/HandshakeOutlined';
 import RecyclingOutlinedIcon from '@mui/icons-material/RecyclingOutlined';
 import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
+import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+
 // Import Material UI Components 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 // Import Components 
 import DrawerAppBar from '../Components/DrawerAppBar';
 import Footer from "../Components/Footer";
 
+// Import 3rd party dependencies 
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Import CSS 
 import '../../css/lightBox.css';
-export default function Home({auth}){
+
+
+
+export default function Home(){
+  const [responseMessage, setResponseMessage] = useState(null);
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Name is required'),
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    phone_number: Yup.string().matches(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/, 'Invalid phone number format').required('Phone number is required'),
+    message: Yup.string().required('Message is required'),
+  });
+
+     
+  const handleToast = (type, message) => {
+    switch (type) {
+      case 'success':
+        toast.success(message, { position: toast.POSITION.TOP_CENTER });
+        break;
+      case 'error':
+        toast.error(message, { position: toast.POSITION.TOP_CENTER });
+        break;
+      default:
+        break;
+    }
+  };
+
+   const handleSubmit = async (values, { setSubmitting }) => {
+    try {
+      const response = await axios.post('/submitContactForm', values, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.data.success) {
+        handleToast('success', response.data.success);
+      } else {
+        handleToast('error', response.data.error);
+      }
+    } catch (error) {
+      handleToast('error', 'Something went wrong while submitting the form');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
     const images = [
         { src: "https://picsum.photos/id/10/1000/1000", alt: "Image 01" },
@@ -264,19 +318,107 @@ export default function Home({auth}){
                 <h2 className="mb-4 text-4xl font-extrabold leading-tight text-amber-900">Ready to dive into the world of stunning epoxy creations?</h2>
                 <p className="mb-6 font-light text-black  md:text-lg"> Whether you have a specific project in mind or just want to explore the possibilities, we're here to turn your ideas into resin reality. Reach out to us using the contact form below, and let's start crafting something extraordinary together. Your vision, our epoxy expertise—it's a perfect mix!</p>
                 {/* <a href="#" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Free trial for 30 days</a> */}
-                <Box
+               
+                {/* <Box
                 component="form"
                 sx={{
                     '& > :not(style)': { m: 1, width: '25ch' },
                   }}
                 noValidate
                 autoComplete="off"
-                >
-                <TextField label="Name" variant="outlined" style={{width: '100%'}}/>
-                <TextField label="Email" variant="outlined" style={{width: '100%'}}/>
-                <TextField label="Phone Number" variant="outlined" style={{width: '100%'}}/>
-                <TextField variant="outlined" label="What service would you like us to provide" multiline={true} rows={2} maxRows={4} style={{width: '100%'}} />
-                </Box>
+                > */}
+  <Formik
+  initialValues={{ name: '', email: '', phone_number: '', message: '' }}
+  validationSchema={validationSchema}
+  onSubmit={handleSubmit}
+>
+  {({
+    values,
+    errors,
+    touched,
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    isValid,
+    dirty,
+    isSubmitting,
+  }) => (
+    <Form onSubmit={handleSubmit}>
+      <Field
+        name="name"
+        type="text"
+        label="Name"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        as={TextField}
+        helperText={touched.name && errors.name}
+        error={touched.name && Boolean(errors.name)}
+      />
+
+      <Field
+        name="email"
+        type="text"
+        label="Email"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        as={TextField}
+        helperText={touched.email && errors.email}
+        error={touched.email && Boolean(errors.email)}
+      />
+
+      <Field
+        name="phone_number"
+        type="text"
+        label="Phone Number"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        as={TextField}
+        helperText={touched.phone_number && errors.phone_number}
+        error={touched.phone_number && Boolean(errors.phone_number)}
+      />
+
+      <Field
+        name="message"
+        type="text"
+        label="Briefly describe the services you need"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        multiline
+        rows={2}
+        maxRows={4}
+        as={TextField}
+        helperText={touched.message && errors.message}
+        error={touched.message && Boolean(errors.message)}
+      />
+
+    <Button
+        type="submit"
+        variant="contained"
+        style={{ backgroundColor: '#5c210a', padding: 10, marginTop: 10 }}
+        disabled={isSubmitting || !isValid || !dirty}
+      >
+        {isSubmitting ? (
+          <CircularProgress size={24} style={{ color: '#fff' }} />
+        ) : (
+          <>
+            Submit Request <SendOutlinedIcon className="ml-3" />
+          </>
+        )}
+      </Button>
+    </Form>
+  )}
+</Formik>
+    {/* {responseMessage && (
+        <div>
+          <p className="mt-4 font-bold">{responseMessage}</p>
+        </div>
+      )} */}
+      <ToastContainer/>
+
             </div>
         </div>
     </section>

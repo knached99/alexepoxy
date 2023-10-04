@@ -16,12 +16,13 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import FormatPaintOutlinedIcon from '@mui/icons-material/FormatPaintOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
-
+import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 const drawerWidth = 240;
 const navItems = ['Home', 'About Us', 'Photo Gallery',  'Contact Us'];
 
 function DrawerAppBar(props) {
-  const { window } = props;
+  const { window, auth } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -57,6 +58,23 @@ function DrawerAppBar(props) {
         <Link to="#contact-us" className="block p-5 py-2 pr-4 pl-3">
           Contact Us 
         </Link>
+        {auth && auth.user ? (
+  <Link
+    href={route('dashboard')}
+    className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+  >
+    Dashboard
+  </Link>
+) : (
+  <>
+    <Link
+      href={route('login')}
+      className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+    >
+      Log in
+    </Link>
+  </>
+)}
       </List>
     </Box>
   );
@@ -113,6 +131,28 @@ function DrawerAppBar(props) {
                 <MailOutlinedIcon className="w-9 h-9" sx={{color: '#fff'}}/>
               </Link>
             </Tooltip>
+
+            {auth && auth.user ? (
+            <Tooltip title="Go to your dashboard">
+            <Link
+              href={route('dashboard')}
+              className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+            >
+              <DashboardOutlinedIcon className="w-9 h-9" sx={{color: '#fff'}}/>
+            </Link>
+            </Tooltip>
+          ) : (
+            <>
+            <Tooltip title="Login to your account">
+              <Link
+                href={route('login')}
+                className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+              >
+                <LoginOutlinedIcon className="w-9 h-9" sx={{color: '#fff'}} />
+              </Link>
+              </Tooltip>
+            </>
+          )}
           </Box>
         </Toolbar>
       </AppBar>
