@@ -33,10 +33,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/gallery', [DashboardController::class, 'displayGallery'])->name('gallery');
     Route::get('/getContactSubmissions', [DashboardController::class, 'getContactSubmissions'])->name('getContactSubmissions');
+    Route::get('/getPhotosFromGallery', [DashboardController::class, 'getPhotosFromGallery'])->name('getPhotosFromGallery');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/deleteSubmission/{submissionID}', [DashboardController::class, 'deleteSubmission'])->name('deleteSubmission');
+    Route::delete('/deletePhoto/{photoID}', [DashboardController::class, 'deletePhotoFromGallery'])->name('deletePhoto');
 });
 
 require __DIR__.'/auth.php';

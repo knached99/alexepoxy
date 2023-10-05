@@ -10,6 +10,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Button from '@mui/material/Button';
+
+// Import third party dependencies
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const columns = [
     { id: 'id', label: 'ID', minWidth: 50 },
@@ -18,7 +24,7 @@ const columns = [
     { id: 'phone_number', label: 'Phone Number', minWidth: 150 },
     { id: 'message', label: 'Message', minWidth: 200 },
     { id: 'created_at', label: 'Created At', minWidth: 170 },
-    { id: 'updated_at', label: 'Updated At', minWidth: 170 },
+    {id: 'delete', label: 'Delete', minWidth: 170},
 ];
 
 export default function Dashboard({ auth }) {
@@ -26,11 +32,14 @@ export default function Dashboard({ auth }) {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
+    const [submissions, setSubmissions] = useState([]);
     const [rows, setRows] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                
                 const response = await fetch('/getContactSubmissions');
                 if (!response.ok) {
                     throw new Error(`Failed to fetch data: ${response.statusText}`);
@@ -47,7 +56,7 @@ export default function Dashboard({ auth }) {
         };
 
         fetchData();
-    }, []);
+    }, [submissions]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -58,12 +67,45 @@ export default function Dashboard({ auth }) {
         setPage(0);
     };
 
+    const deleteSubmission = async (submissionId) => {
+        try {
+          // Make a DELETE request using Axios
+          const response = await axios.delete(`/deleteSubmission/${submissionId}`);
+      
+          if (response.status === 200) {
+            // Submission deleted successfully
+            setSuccess(toast.success(response.data.success));
+      
+            // Remove the deleted submission from the 'submissions' state
+            setSubmissions((prevSubmissions) =>
+            prevSubmissions.filter((submission) => submission.id !== submissionId)
+          );
+          
+          } else {
+            // Handle the error case
+            const errorMessage = response.data.error || 'An error occurred while deleting the submission.';
+            setError(errorMessage);
+          }
+        } catch (error) {
+          console.log('Error deleting submission:', error);
+          setError('An error occurred while deleting the submission.');
+        }
+      };
+    
+    
+    
+    
+
     return (
+        
         <AuthenticatedLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
         >
+            <meta name="csrf-token" content="{{ csrf_token() }}" />
             <Head title="Dashboard" />
+            
+
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -98,7 +140,8 @@ export default function Dashboard({ auth }) {
                                                   <TableCell>{row.phone_number}</TableCell>
                                                   <TableCell>{row.message}</TableCell>
                                                   <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
-                                                  <TableCell>{new Date(row.updated_at).toLocaleString()}</TableCell>
+                                                  <TableCell>
+                                                    <Button variant="contained" style={{backgroundColor: 'red'}} onClick={() => deleteSubmission(row.id)}>Delete</Button></TableCell>
 
                                               </TableRow>
                                           );
@@ -119,6 +162,7 @@ export default function Dashboard({ auth }) {
                       
                         )}
                         {/* End Section */}
+                        <ToastContainer/>
                     </div>
                 </div>
             </div>

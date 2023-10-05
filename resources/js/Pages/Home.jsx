@@ -135,7 +135,7 @@ export default function Home(){
 
 
 
-    {/* <section className="bg-white dark:bg-gray-900">
+    {/* <section className="bg-white ">
         <div className="py-8 lg:py-16 mx-auto max-w-screen-xl px-4">
             <h2 className="mb-8 lg:mb-16 text-3xl font-extrabold tracking-tight leading-tight text-center text-gray-900  md:text-4xl">You’ll be in good company</h2>
             <div className="grid grid-cols-2 gap-8 text-gray-500 sm:gap-12 md:grid-cols-3 lg:grid-cols-6 ">
@@ -199,7 +199,7 @@ export default function Home(){
     </section> */}
  
 
-    <section className="bg-gray-50 dark:bg-gray-800">
+    <section className="bg-gray-50">
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div className="max-w-screen-md mb-8 lg:mb-16">
                 <h2 className="mb-4 text-4xl font-extrabold text-amber-900 ">About Our Company</h2>
@@ -253,7 +253,7 @@ export default function Home(){
         </div>
       </section>
 
-      {/* <section className="bg-white dark:bg-gray-900">
+      {/* <section className="bg-white ">
         <div className="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
             <div className="font-light text-gray-500 sm:text-lg ">
                 <h2 className="mb-4 text-4xl font-extrabold text-gray-900 ">We didn't reinvent the wheel</h2>
@@ -309,7 +309,7 @@ export default function Home(){
       )}
     </div>
 
-    {/* <section className="bg-gray-50 dark:bg-gray-900 dark:bg-gray-800">
+    {/* <section className="bg-gray-50  dark:bg-gray-800">
         <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
             <div className="max-w-screen-lg text-gray-500 sm:text-lg ">
                 <h2 className="mb-4 text-4xl font-bold text-gray-900 ">Powering innovation at <span className="font-extrabold">200,000+</span> companies worldwide</h2>
@@ -323,7 +323,7 @@ export default function Home(){
         </div>
       </section> */}
 
-      <section className="bg-white dark:bg-gray-900">
+      <section className="bg-white ">
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div className="mx-auto max-w-screen-sm text-center">
                 <h2 className="mb-4 text-4xl font-extrabold leading-tight text-amber-900">Ready to dive into the world of stunning epoxy creations?</h2>
@@ -355,6 +355,7 @@ export default function Home(){
     isSubmitting,
   }) => (
     <Form onSubmit={handleSubmit}>
+      
       <Field
         name="name"
         type="text"
