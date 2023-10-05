@@ -7,8 +7,15 @@ use App\Models\ContactSubmissionsModel;
 
 class DashboardController extends Controller
 {
-    public function getContactSubmissions(){
+    public function getContactSubmissions()
+{
+    try {
         $contactSubmissions = ContactSubmissionsModel::all();
-        return $contactSubmissions; 
+        return response()->json($contactSubmissions);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
+
+    
 }
