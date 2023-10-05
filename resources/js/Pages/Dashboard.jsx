@@ -75,10 +75,48 @@ export default function Dashboard({ auth }) {
                             </div>
                         ) : error ? (
                             <div className="text-red-600 p-4">{error}</div>
-                        ) : (
-                            <Paper sx={{ width: '100%' }}>
-                                {/* Rest of your table code */}
-                            </Paper>
+                        ) : rows.length===0 ? (
+                          <div className="text-red-500 text-xl text-center p-3 m-3">No Submissions Yet</div>
+                        ) :(
+                          <Paper sx={{ width: '100%' }}>
+                          <TableContainer>
+                              <Table>
+                                  <TableHead>
+                                      <TableRow>
+                                          {columns.map((column) => (
+                                              <TableCell key={column.id}>{column.label}</TableCell>
+                                          ))}
+                                      </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                      {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                          return (
+                                              <TableRow key={row.id}>
+                                                  <TableCell>{row.id}</TableCell>
+                                                  <TableCell>{row.name}</TableCell>
+                                                  <TableCell>{row.email}</TableCell>
+                                                  <TableCell>{row.phone_number}</TableCell>
+                                                  <TableCell>{row.message}</TableCell>
+                                                  <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
+                                                  <TableCell>{new Date(row.updated_at).toLocaleString()}</TableCell>
+
+                                              </TableRow>
+                                          );
+                                      })}
+                                  </TableBody>
+                              </Table>
+                          </TableContainer>
+                          <TablePagination
+                              rowsPerPageOptions={[10, 25, 100]}
+                              component="div"
+                              count={rows.length}
+                              rowsPerPage={rowsPerPage}
+                              page={page}
+                              onPageChange={handleChangePage}
+                              onRowsPerPageChange={handleChangeRowsPerPage}
+                          />
+                      </Paper>
+                      
                         )}
                         {/* End Section */}
                     </div>

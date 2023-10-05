@@ -11,6 +11,7 @@ class DashboardController extends Controller
 {
     try {
         $contactSubmissions = ContactSubmissionsModel::all();
+        // \Log::info($contactSubmissions);
         return response()->json($contactSubmissions);
     } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()], 500);
