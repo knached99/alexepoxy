@@ -31,8 +31,10 @@ export default function Dashboard({ auth }) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
+    const [deleteLoading, setDeleteLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [loadingRows, setLoadingRows] = useState([]);
     const [submissions, setSubmissions] = useState([]);
     const [rows, setRows] = useState([]);
 
@@ -50,7 +52,7 @@ export default function Dashboard({ auth }) {
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
-                setError(error.message || 'An error occurred while fetching data.');
+                setError(toast.error(error.message || 'An error occurred while fetching data.'));
                 setLoading(false);
             }
         };
@@ -66,8 +68,10 @@ export default function Dashboard({ auth }) {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
-    const deleteSubmission = async (submissionId) => {
+    const deleteSubmission = async (submissionId, index) => {
+        // Set loading state for the specific row
+        setLoadingRows((prevLoadingRows) => [...prevLoadingRows, index]);
+      
         try {
           // Make a DELETE request using Axios
           const response = await axios.delete(`/deleteSubmission/${submissionId}`);
@@ -78,19 +82,22 @@ export default function Dashboard({ auth }) {
       
             // Remove the deleted submission from the 'submissions' state
             setSubmissions((prevSubmissions) =>
-            prevSubmissions.filter((submission) => submission.id !== submissionId)
-          );
-          
+              prevSubmissions.filter((submission) => submission.id !== submissionId)
+            );
           } else {
             // Handle the error case
             const errorMessage = response.data.error || 'An error occurred while deleting the submission.';
-            setError(errorMessage);
+            setError(toast.error(errorMessage));
           }
         } catch (error) {
           console.log('Error deleting submission:', error);
-          setError('An error occurred while deleting the submission.');
+          setError(toast.error('An error occurred while deleting the submission.'));
+        } finally {
+          // Remove the loading state for the specific row
+          setLoadingRows((prevLoadingRows) => prevLoadingRows.filter((_, i) => i !== index));
         }
       };
+      
     
     
     
@@ -115,9 +122,7 @@ export default function Dashboard({ auth }) {
                             <div className="flex items-center justify-center h-40">
                                 <CircularProgress color="secondary" />
                             </div>
-                        ) : error ? (
-                            <div className="text-red-600 p-4">{error}</div>
-                        ) : rows.length===0 ? (
+                        )  : rows.length===0 ? (
                           <div className="text-red-500 text-xl text-center p-3 m-3">No Submissions Yet</div>
                         ) :(
                           <Paper sx={{ width: '100%' }}>
@@ -131,22 +136,30 @@ export default function Dashboard({ auth }) {
                                       </TableRow>
                                   </TableHead>
                                   <TableBody>
-                                      {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                          return (
-                                              <TableRow key={row.id}>
-                                                  <TableCell>{row.id}</TableCell>
-                                                  <TableCell>{row.name}</TableCell>
-                                                  <TableCell>{row.email}</TableCell>
-                                                  <TableCell>{row.phone_number}</TableCell>
-                                                  <TableCell>{row.message}</TableCell>
-                                                  <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
-                                                  <TableCell>
-                                                    <Button variant="contained" style={{backgroundColor: 'red'}} onClick={() => deleteSubmission(row.id)}>Delete</Button></TableCell>
-
-                                              </TableRow>
-                                          );
-                                      })}
-                                  </TableBody>
+                                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+                                        <TableRow key={row.id}>
+                                        <TableCell>{row.id}</TableCell>
+                                        <TableCell>{row.name}</TableCell>
+                                        <TableCell>{row.email}</TableCell>
+                                        <TableCell>{row.phone_number}</TableCell>
+                                        <TableCell>{row.message}</TableCell>
+                                        <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
+                                        <TableCell>
+                                            {loadingRows.includes(index) ? (
+                                            <CircularProgress color="secondary" />
+                                            ) : (
+                                            <Button
+                                                variant="contained"
+                                                style={{ backgroundColor: 'red' }}
+                                                onClick={() => deleteSubmission(row.id, index)}
+                                            >
+                                                Delete
+                                            </Button>
+                                            )}
+                                        </TableCell>
+                                        </TableRow>
+                                    ))}
+                                    </TableBody>
                               </Table>
                           </TableContainer>
                           <TablePagination

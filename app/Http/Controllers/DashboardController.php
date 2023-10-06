@@ -20,6 +20,21 @@ class DashboardController extends Controller
     }
 }
 
+public function deleteSubmission($submissionID){
+    try {
+        $delete = ContactSubmissionsModel::destroy($submissionID);
+
+        if ($delete) {
+            return response()->json(['success' => 'Submission deleted successfully']);
+        } else {
+            return response()->json(['error' => 'Submission not found'], 404);
+        }
+    } catch (\Exception $e) {
+        // Handle any exceptions that occur during deletion
+        return response()->json(['error' => 'An error occurred while deleting the submission: '.$e->getMessage().' '], 500);
+    }
+}
+
 public function displayGallery(){
     return Inertia::render('Gallery');
 }
@@ -51,20 +66,7 @@ public function deletePhotoFromGallery($photoID){
     
 }
 
-public function deleteSubmission($submissionID){
-    try {
-        $delete = ContactSubmissionsModel::destroy($submissionID);
 
-        if ($delete) {
-            return response()->json(['success' => 'Submission deleted successfully']);
-        } else {
-            return response()->json(['error' => 'Submission not found'], 404);
-        }
-    } catch (\Exception $e) {
-        // Handle any exceptions that occur during deletion
-        return response()->json(['error' => 'An error occurred while deleting the submission: '.$e->getMessage().' '], 500);
-    }
-}
 
     
 }
