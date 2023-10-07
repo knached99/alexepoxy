@@ -70,7 +70,6 @@ export default function Dashboard({ auth }) {
     };
     const deleteSubmission = async (submissionId, index) => {
         // Set loading state for the specific row
-        setLoadingRows((prevLoadingRows) => [...prevLoadingRows, index]);
       
         try {
           // Make a DELETE request using Axios
@@ -92,10 +91,7 @@ export default function Dashboard({ auth }) {
         } catch (error) {
           console.log('Error deleting submission:', error);
           setError(toast.error('An error occurred while deleting the submission.'));
-        } finally {
-          // Remove the loading state for the specific row
-          setLoadingRows((prevLoadingRows) => prevLoadingRows.filter((_, i) => i !== index));
-        }
+        } 
       };
       
     
@@ -145,9 +141,7 @@ export default function Dashboard({ auth }) {
                                         <TableCell>{row.message}</TableCell>
                                         <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
                                         <TableCell>
-                                            {loadingRows.includes(index) ? (
-                                            <CircularProgress color="secondary" />
-                                            ) : (
+                                           
                                             <Button
                                                 variant="contained"
                                                 style={{ backgroundColor: 'red' }}
@@ -155,7 +149,7 @@ export default function Dashboard({ auth }) {
                                             >
                                                 Delete
                                             </Button>
-                                            )}
+
                                         </TableCell>
                                         </TableRow>
                                     ))}

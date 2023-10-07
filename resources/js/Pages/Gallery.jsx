@@ -23,89 +23,52 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
+import { object, string, mixed } from 'yup';
 
 const columns = [
   { id: 'id', label: 'Photo ID', minWidth: 50 },
   { id: 'photo_label', label: 'Label', minWidth: 170 },
   { id: 'photo', label: 'Photo', minWidth: 200 },
   { id: 'photo_description', label: 'Description', minWidth: 200 },
+  {id: 'created_at', label: 'Uploaded At', minWidth: 170}
 ];
 
 
-// const validFileExtensions = { image: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'] };
 
-// function isValidFileType(fileName, fileType) {
-//   return fileName && fileType && fileType.split('/')[0] && validFileExtensions[fileType.split('/')[0]].indexOf(fileName.split('.').pop()) > -1;
-// }
-
-// function getAllowedExt(type) {
-//   return validFileExtensions[type].map((e) => `.${e}`).toString();
-// }
+const validationSchema = object().shape({
+  photo: mixed()
+    .required('Photo is required')
+    .test('fileSize', 'File size is too large', (value) => {
+      if (!value) return true; // Allow empty file
+      return value.size <= 2 * 1024 * 1024; // 2MB
+    })
+    .test('fileType', 'Invalid file format', (value) => {
+      if (!value) return true; // Allow empty file
+      return ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'].includes(value.type);
+    }),
+  photo_label: string().required('Photo Label is required'),
+  photo_description: string().required('Photo Description is required'),
+});
 
 const initialValues = {
-  photo: '', // or undefined
+  photo: undefined,
   photo_label: '',
   photo_description: '',
 };
 
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-
-const validFileExtensions = { image: ['jpg', 'gif', 'png', 'jpeg', 'svg', 'webp'] };
-
-function isValidFileType(fileName, fileType) {
-  return fileName && validFileExtensions[fileType].indexOf(fileName.split('.').pop()) > -1;
-}
-
-const validationSchema = Yup.object().shape({
-  photo: Yup
-      .mixed()
-      .required("Required")
-      .test("is-valid-type", "Not a valid image type",
-        value => isValidFileType(value && value.name.toLowerCase(), "image"))
-      .test("is-valid-size", "Max allowed size is 100KB",
-        value => value && value.size <= MAX_FILE_SIZE),
-        photo_label: Yup.string().required('Photo label is required'),
-        photo_description: Yup.string().required('Photo description is required')
-});
-
-// const validationSchema = Yup.object().shape({
-//   photo: Yup.mixed()
-//     .required('Photo is required')
-//     .test('fileType', 'Invalid file type, only images are allowed', (value) => {
-//       if (!value) return false;
-//       const acceptedTypes = [ 'jpg', 'jpeg', 'png'];
-//       return acceptedTypes.includes(value.type);
-//     })
-//     .test('fileSize', 'File size is too large. Max size is 2MB', (value) => {
-//       if (!value) return false;
-//       const maxSize = 2 * 1024 * 1024; // 2MB
-//       return value.size <= maxSize;
-//     }),
-//     photo_label: Yup.string().required('Photo label is required'),
-//     photo_description: Yup.string().required('Photo description is required') 
-// });
-
-
-
-
-
-
-  
-
-  
 
 export default function Gallery({ auth }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [toastError, setToastError] = useState(null);
+  const [modalError, setModalError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false); // For Dialog 
+  const [previewImage, setPreviewImage] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -113,6 +76,7 @@ export default function Gallery({ auth }) {
 
   const handleClose = () => {
     setOpen(false);
+    setPreviewImage(null);
   };
 
   useEffect(() => {
@@ -130,9 +94,10 @@ export default function Gallery({ auth }) {
         setLoading(false);
       }
     };
-
+  
     fetchPhotos();
-  }, [photos]);
+  }, [photos]); // Refresh 
+  
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -167,31 +132,173 @@ export default function Gallery({ auth }) {
     }
   };
 
-  const uploadPhoto = async (values, { setSubmitting }) => {
+  const handlePhotoChange = (e, form) => {
+    const file = e.target.files[0];
+    form.setFieldValue('photo', file); // Update the 'photo' field in form values
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
+    }
+  };
+  
+  
+
+
+  // const uploadPhoto = async (values) => {
+  //   try {
+  //     const response = await axios.post('/uploadPhotoToGallery', values, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  
+  //     if (response.status === 200) {
+  //       // Success: Clear the form or show a success message.
+  //       console.log('Photo uploaded successfully');
+  //       setPreviewImage(null); // Clear the image preview
+  //     } else {
+  //       // Handle other server errors as needed.
+  //       setModalError(`Server Error: ${response.status}`);
+  //       console.error('Server error:', response.status);
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 422) {
+  //       // Validation errors: Display the errors on the form.
+  //       const validationErrors = error.response.data.error;
+  //       setModalError(validationErrors); // Set Formik errors
+  //     } else {
+  //       console.error('Validation Error:', validationErrors);
+  //     }
+  //   }
+  // };
+
+  // const uploadPhoto = async (values) => {
+  //   try {
+  //     if (!values.photo) {
+  //       setModalError('Photo is required');
+  //       return;
+  //     }
+  
+  //     const response = await axios.post('/uploadPhotoToGallery', values, {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
+  
+  //     if (response.status === 200) {
+  //       // Success: Clear the form or show a success message.
+  //       console.log('Photo uploaded successfully');
+  //       setPreviewImage(null); // Clear the image preview
+  //     } else {
+  //       // Handle other server errors as needed.
+  //       setModalError(`Server Error: ${response.status}`);
+  //       console.error('Server error:', response.status);
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 422) {
+  //       // Validation errors: Display the errors on the form.
+  //       const validationErrors = error.response.data.error;
+  //       setModalError(validationErrors); // Set Formik errors
+  //     } else {
+  //       console.error('Error uploading photo:', error);
+  //       setModalError('An error occurred while uploading the photo.');
+  //     }
+  //   }
+  // };
+  
+  
+  // const uploadPhoto = async (values) => {
+  //   try {
+  //     if (!values.photo) {
+  //       setModalError('Photo is required');
+  //       return;
+  //     }
+  
+  //     const formData = new FormData();
+  //     formData.append('photo', values.photo);
+  //     formData.append('photo_label', values.photo_label);
+  //     formData.append('photo_description', values.photo_description);
+  
+  //     const response = await axios.post('/uploadPhotoToGallery', formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data', // Important: Set the content type to multipart/form-data
+  //       },
+  //     });
+  
+  //     if (response.status === 200) {
+  //       // Success: Clear the form or show a success message.
+  //       setOpen(false);
+  //       setSuccess(toast.success(response.data.success));
+  //       setPreviewImage(null); // Clear the image preview
+  //     } else {
+  //       // Handle other server errors as needed.
+  //       setModalError(`Server Error: ${response.status}`);
+  //       console.error('Server error:', response.status);
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.status === 422) {
+  //       // Validation errors: Display the errors on the form.
+  //       const validationErrors = error.response.data.error;
+  //       setModalError(validationErrors); // Set Formik errors
+  //     } else {
+  //       console.error('Error uploading photo:', error);
+  //       setModalError('An error occurred while uploading the photo.');
+  //     }
+  //   }
+  // };
+
+  const uploadPhoto = async (values) => {
     try {
+      if (!values.photo) {
+        setModalError('Photo is required');
+        return;
+      }
+  
       const formData = new FormData();
       formData.append('photo', values.photo);
       formData.append('photo_label', values.photo_label);
       formData.append('photo_description', values.photo_description);
-
+  
       const response = await axios.post('/uploadPhotoToGallery', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      if (response.data.success) {
-        setSuccess(toast.success(response.data.success, { position: toast.POSITION.TOP_CENTER_CENTER }));
+  
+      if (response.status === 200) {
+        // Success: Clear the form or show a success message.
+        setOpen(false);
+        setSuccess(toast.success(response.data.success));
+        setPreviewImage(null); // Clear the image preview
+        
+        // Update the 'photos' state to trigger a re-render
+        setPhotos([...photos, response.data.photo]); // Assuming response.data.photo contains the new photo data
       } else {
-        setToastError(response.data.error || 'An error occurred while uploading that photo to the gallery.');
+        // Handle other server errors as needed.
+        setModalError(`Server Error: ${response.status}`);
+        console.error('Server error:', response.status);
       }
     } catch (error) {
-      setToastError(error.message || 'An error occurred while uploading that photo to the gallery');
-    } finally {
-      setSubmitting(false);
-      handleClose(); // Close the dialog after submission
+      if (error.response && error.response.status === 422) {
+        // Validation errors: Display the errors on the form.
+        const validationErrors = error.response.data.error;
+        setModalError(validationErrors); // Set Formik errors
+      } else {
+        console.error('Error uploading photo:', error);
+        setModalError('An error occurred while uploading the photo.');
+      }
     }
   };
+  
+
+  
+  
+  
 
   return (
     <AuthenticatedLayout
@@ -203,7 +310,7 @@ export default function Gallery({ auth }) {
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <Button variant="contained" style={{ margin: 10 }} onClick={handleClickOpen}>
+          <Button variant="contained" style={{ margin: 10, backgroundColor: 'black' }} onClick={handleClickOpen}>
             Upload Photo
           </Button>
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -231,7 +338,15 @@ export default function Gallery({ auth }) {
                           <TableRow key={row.id}>
                             <TableCell>{row.id}</TableCell>
                             <TableCell>{row.photo_label}</TableCell>
-                            <TableCell>{row.photo}</TableCell>
+                            <TableCell>
+                          <img
+                            src={`storage/gallery/${row.photo}`}
+                            alt="Photo"
+                            style={{ width: '100px', height: '100px' }}
+                          />
+                        </TableCell>
+
+
                             <TableCell>{row.photo_description}</TableCell>
                             <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
                             <TableCell>
@@ -265,9 +380,30 @@ export default function Gallery({ auth }) {
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Upload Photo To The Gallery</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              Simply upload the picture to the gallery and provide a label and description
-            </DialogContentText>
+          <DialogContentText>
+          Simply upload the picture to the gallery and provide a label and description
+        </DialogContentText>
+        <div>
+        {modalError && typeof modalError === 'object' && (
+          <ul>
+            {Object.values(modalError).map((error, index) => (
+              <li key={index} className="text-red-400 font-semibold">
+                {error}
+              </li>
+            ))}
+          </ul>
+)}
+        </div>
+
+
+
+            {previewImage && (
+                  <div>
+                    <label>Image Preview:</label>
+                    <img style={{width: '50%', height: '50%', margin: 10}} src={previewImage} alt="Preview" />
+                  </div>
+            )}
+
             <Formik 
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -277,22 +413,24 @@ export default function Gallery({ auth }) {
                 errors,
                 touched,
                 handleSubmit,
+                handleBlur,
+                handleChange,
+                setFieldValue,
                 isValid,
                 dirty,
                 isSubmitting,
               })=>(
-                <Form onSubmit={handleSubmit}>
-                  <Field 
-                  name="photo"
-                  type="file"
-                  label="Select Image"
-                  variant="outlined"
-                  fullWidth 
-                  margin="normal"
-                  as={TextField}
-                  helperText={touched.photo && errors.photo} 
-                  error={touched.photo && Boolean(errors.photo)} 
-                  />
+                <Form onSubmit={handleSubmit} encType="multipart/form-data">
+                
+                <Field
+                type="file"
+                id="photo"
+                name="photo"
+                accept=".png, .jpg, .jpeg, .webp"
+                component={TextField}
+                fullWidth
+                onChange={(e) => handlePhotoChange(e, { setFieldValue })}
+              />
 
                   <Field 
                   name="photo_label"
@@ -300,6 +438,8 @@ export default function Gallery({ auth }) {
                   label="Enter label for Photo" 
                   variant="outlined"
                   fullWidth 
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   as={TextField}
                   helperText={touched.photo_label && errors.photo_label} 
                   error={touched.photo_label && Boolean(errors.photo_label)}
@@ -313,7 +453,9 @@ export default function Gallery({ auth }) {
                   fullWidth 
                   as={TextField}
                   multiline 
-                  rows={2}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  minRows={2}
                   maxRows={4}
                   helperText={touched.photo_description && errors.photo_description} 
                   error={touched.photo_description && Boolean(errors.photo_description)}
@@ -323,7 +465,7 @@ export default function Gallery({ auth }) {
                     variant="contained"
                     style={{
                       color: 'white',
-                      backgroundColor: isSubmitting || !isValid || !dirty ? 'grey' : 'blue',
+                      backgroundColor: isSubmitting || !isValid || !dirty ? 'grey' : 'black' ,
                       padding: 10,
                       marginTop: 10,
                     }}

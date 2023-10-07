@@ -59,4 +59,5 @@ class Home extends Controller
         // If the request is not JSON, return an error response
         return response()->json(['error' => 'Invalid request format'], 400);
     }
+
 }
