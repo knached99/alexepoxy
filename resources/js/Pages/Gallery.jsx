@@ -428,6 +428,7 @@ export default function Gallery({ auth }) {
                 name="photo"
                 accept=".png, .jpg, .jpeg, .webp"
                 component={TextField}
+                style={{margin: 10}}
                 fullWidth
                 onChange={(e) => handlePhotoChange(e, { setFieldValue })}
               />
@@ -441,6 +442,7 @@ export default function Gallery({ auth }) {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   as={TextField}
+                  style={{margin: 10}}
                   helperText={touched.photo_label && errors.photo_label} 
                   error={touched.photo_label && Boolean(errors.photo_label)}
                   />
@@ -452,6 +454,7 @@ export default function Gallery({ auth }) {
                   variant="outlined"
                   fullWidth 
                   as={TextField}
+                  style={{margin: 10}}
                   multiline 
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -468,7 +471,8 @@ export default function Gallery({ auth }) {
                       textTransform: 'lowercase',
                       backgroundColor: isSubmitting || !isValid || !dirty ? 'grey' : '#3f51b5' ,
                       padding: 10,
-                      marginTop: 10,
+                      margin: 10,
+                      width: '100%'
                     }}
                     disabled={isSubmitting || !isValid || !dirty}
                   >
