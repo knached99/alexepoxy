@@ -144,7 +144,7 @@ export default function Dashboard({ auth }) {
                                            
                                             <Button
                                                 variant="contained"
-                                                style={{ backgroundColor: 'red' }}
+                                                style={{backgroundColor: '#f50057', textTransform: 'lowercase'}}
                                                 onClick={() => deleteSubmission(row.id, index)}
                                             >
                                                 Delete

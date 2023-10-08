@@ -51,7 +51,7 @@ function DrawerAppBar(props) {
         <Link to="#contact-us" className="block p-5 py-2 pr-4 pl-3">
           Contact Us 
         </Link>
-        {auth && auth.user ? (
+        {props.auth && props.auth.user ? (
   <Link
     href={route('dashboard')}
     className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"

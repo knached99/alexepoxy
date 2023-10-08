@@ -124,7 +124,7 @@ public function deletePhotoFromGallery($photoID){
         }
     }
         catch(\Exception $e){
-            return response()->json(['error'=> 'An error occurred while deleting that photo: '.$e->getMessage()], 500);
+            return response()->json(['error'=> 'An error occurred while deleting that photo'], 500);
         }
     
 }

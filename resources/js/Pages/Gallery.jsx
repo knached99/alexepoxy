@@ -310,7 +310,7 @@ export default function Gallery({ auth }) {
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <Button variant="contained" style={{ margin: 10, backgroundColor: 'black' }} onClick={handleClickOpen}>
+          <Button variant="contained" style={{ margin: 10, backgroundColor: '#3f51b5', textTransform: 'lowercase' }} onClick={handleClickOpen}>
             Upload Photo
           </Button>
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -350,7 +350,7 @@ export default function Gallery({ auth }) {
                             <TableCell>{row.photo_description}</TableCell>
                             <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
                             <TableCell>
-                              <Button variant="contained" style={{ backgroundColor: 'red' }} onClick={() => deletePhoto(row.id)}>Delete</Button>
+                              <Button variant="contained" style={{backgroundColor: '#f50057', textTransform: 'lowercase'}} onClick={() => deletePhoto(row.id)}>Delete</Button>
                             </TableCell>
                           </TableRow>
                         );
@@ -465,7 +465,8 @@ export default function Gallery({ auth }) {
                     variant="contained"
                     style={{
                       color: 'white',
-                      backgroundColor: isSubmitting || !isValid || !dirty ? 'grey' : 'black' ,
+                      textTransform: 'lowercase',
+                      backgroundColor: isSubmitting || !isValid || !dirty ? 'grey' : '#3f51b5' ,
                       padding: 10,
                       marginTop: 10,
                     }}

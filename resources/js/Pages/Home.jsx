@@ -31,7 +31,7 @@ import '../../css/lightBox.css';
 
 
 
-export default function Home(){
+export default function Home({auth}){
   const [images, setImages] = useState([]); // Updated images state
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -139,7 +139,7 @@ export default function Home(){
         <Head title="Home"/>
         <body>
     <header>
-    <DrawerAppBar/>
+    <DrawerAppBar auth={auth}/>
     </header>
 
     <section className="relative bg-cover bg-center h-screen opacity-90" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1641893979088-87d4d9604c36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80')"}}>
