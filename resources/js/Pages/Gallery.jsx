@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -30,7 +30,9 @@ const columns = [
   { id: 'photo_label', label: 'Label', minWidth: 170 },
   { id: 'photo', label: 'Photo', minWidth: 200 },
   { id: 'photo_description', label: 'Description', minWidth: 200 },
-  {id: 'created_at', label: 'Uploaded At', minWidth: 170}
+  {id: 'created_at', label: 'Uploaded At', minWidth: 170},
+  {id: 'edit', label: 'Edit', minWidth: 60},
+  {id: 'delete', label: 'Delete', minWidth: 60}
 ];
 
 
@@ -349,6 +351,11 @@ export default function Gallery({ auth }) {
 
                             <TableCell>{row.photo_description}</TableCell>
                             <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
+                            <TableCell>
+                            <a href={`/photo/${row.id}/view`}>View</a>
+
+                            </TableCell>
+
                             <TableCell>
                               <Button variant="contained" style={{backgroundColor: '#f50057', textTransform: 'lowercase'}} onClick={() => deletePhoto(row.id)}>Delete</Button>
                             </TableCell>

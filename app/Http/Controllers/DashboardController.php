@@ -9,7 +9,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image; // Import the Image facade
 use Intervention\Image\Exception\NotReadableException; // Catches File Exceptions for the Intervention\Image dependency
-
+use Illuminate\Database\Eloquent\ModelNotFoundException; 
 class DashboardController extends Controller
 {
     public function getContactSubmissions()
@@ -48,9 +48,25 @@ public function getPhotosFromGallery(){
         return response()->json($photos);
     }
     catch(\Exception $e){
-        return response()->json(['error' => $e->getMessage()], 500);
+        return response()->json(['error' => 'Something went wrong getting the photos from the gallery'], 500);
     }
 }
+
+public function renderPhotoGallery($photoID) {
+    try {
+        $data = PhotoGallery::where('id', $photoID)->firstOrFail(); // Fetch the photo data
+        return Inertia::render('View', [
+            'photoID' => $photoID,
+            'data' => $data, 
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Something went wrong getting that photo from the gallery'], 500);
+    }
+    catch(ModelNotFoundException $e){
+        return response()->json(['error'=>'Cannot get that photo, it may not exist or you may have deleted it']);
+    }
+}
+
 
 
 
@@ -105,6 +121,26 @@ public function uploadPhotoToGallery(Request $request)
     } catch (NotReadableException $e) {
         \Log::error('Image Intervention Exception: ' . $e->getMessage());
         return response()->json(['error', 'Something went wrong uploading that photo to the gallery.']);
+    }
+}
+
+public function editPhoto($photoID){
+    try{
+        $photo = PhotoGallery::findOrFail($photoID);
+        $validate = \Validator::make($request->only('photo_label', 'photo_description'),[
+            'photo_label'=>'required',
+            'photo_description'=>'required'
+        ]);
+        if($validate->fails()){
+            return response()->json(['error'=>$validate->errors()], 422);
+        }
+        $photo->photo_label = $request->input(''); 
+    }
+    catch(\Exception $e){
+        return response()->json(['error'=>'Something went wrong editing this content']);
+    }
+    catch(ModelNotFoundException $e){
+        return response()->json(['error'=>'Something went wrong editing this content']);
     }
 }
 
