@@ -43,7 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/deleteSubmission/{submissionID}', [DashboardController::class, 'deleteSubmission'])->name('deleteSubmission');
     Route::post('/uploadPhotoToGallery', [DashboardController::class, 'uploadPhotoToGallery'])->name('uploadPhotoToGallery');
     Route::get('/photo/{photoID}/view', [DashboardController::class, 'renderPhotoGallery'])->name('view');
-    Route::put('/updatePhoto/{photoID}', [DashboardController::class,  'editPhoto'])->name('editPhoto');
+    Route::get('/getPhotoByID/{photoID}', [DashboardController::class, 'getPhotoByID'])->name('getPhotoByID');
+    Route::put('/editPhoto/{photoID}', [DashboardController::class,  'editPhoto'])->name('editPhoto');
     Route::delete('/deletePhoto/{photoID}', [DashboardController::class, 'deletePhotoFromGallery'])->name('deletePhoto');
 });
 

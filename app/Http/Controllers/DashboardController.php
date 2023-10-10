@@ -68,6 +68,22 @@ public function renderPhotoGallery($photoID) {
 }
 
 
+public function getPhotoByID($photoID) {
+    try{
+        $data = PhotoGallery::where('id', $photoID)->firstOrFail(); // Fetch the photo data
+        return response()->json($data);
+    }
+    catch(\Exception $e){
+        return response()->json(['error'=>'Something went wrong getting new content'], 500);
+        \Log::error('Exception Caught: '.$e->getMessage());
+    }
+
+    catch(ModelNotFoundException $e){
+        return response()->json(['error'=>'Something went wrong getting new content'], 500);
+        \Log::error('Exception Caught: '.$e->getMessage());
+    }
+}
+
 
 
 public function uploadPhotoToGallery(Request $request)
@@ -124,7 +140,7 @@ public function uploadPhotoToGallery(Request $request)
     }
 }
 
-public function editPhoto($photoID){
+public function editPhoto(Request $request, $photoID){
     try{
         $photo = PhotoGallery::findOrFail($photoID);
         $validate = \Validator::make($request->only('photo_label', 'photo_description'),[
@@ -134,7 +150,10 @@ public function editPhoto($photoID){
         if($validate->fails()){
             return response()->json(['error'=>$validate->errors()], 422);
         }
-        $photo->photo_label = $request->input(''); 
+        $photo->photo_label = $request->input('photo_label');
+        $photo->photo_description = $request->input('photo_description');
+        $photo->save();
+        return response()->json(['success'=>'Your changes were saved']);
     }
     catch(\Exception $e){
         return response()->json(['error'=>'Something went wrong editing this content']);
