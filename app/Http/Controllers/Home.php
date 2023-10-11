@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ContactSubmissionsModel;
+use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NotifyContactSubmitted;
 use Illuminate\Notifications\NotificationException;
@@ -58,6 +59,16 @@ class Home extends Controller
 
         // If the request is not JSON, return an error response
         return response()->json(['error' => 'Invalid request format'], 400);
+    }
+
+    public function getSocialMediaLinks(){
+        try{
+           $socialMediaLinks =  User::select('facebook_url', 'instagram_url', 'twitter_url', 'tiktok_url')->get();
+            return response()->json($socialMediaLinks);
+        }
+        catch(\Exception $e){
+            \Log::error('Unable to get social media links: '.$e->getMessage());
+        }
     }
 
 }

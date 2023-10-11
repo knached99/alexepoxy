@@ -39,6 +39,7 @@ export default function View({ auth, data }) {
     if (isEditSuccess) {
         fetchData(data.id); // Fetch data based on the updated data ID
         setIsEditSuccess(false); // Reset the edit status
+        window.location.reload(); // Refresh new content 
     }
 }, [isEditSuccess, data.id]);
 

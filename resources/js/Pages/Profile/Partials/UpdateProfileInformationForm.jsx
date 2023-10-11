@@ -11,6 +11,10 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
         email: user.email,
+        facebook_url: user.facebook_url,
+        instagram_url: user.instagram_url,
+        twitter_url: user.twitter_url,
+        tiktok_url: user.tiktok_url
     });
 
     const submit = (e) => {
@@ -25,7 +29,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 <h2 className="text-lg font-medium text-gray-900">Profile Information</h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
+                    Update your account's profile information, email address, and social media accounts.
+                    Your social media links will appear on the homepage on the footer.
                 </p>
             </header>
 
@@ -62,6 +67,8 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     <InputError className="mt-2" message={errors.email} />
                 </div>
 
+                
+
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>
                         <p className="text-sm mt-2 text-gray-800">
@@ -83,6 +90,67 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         )}
                     </div>
                 )}
+
+                    <div>
+                    <InputLabel htmlFor="facebook_url" value="Facebook" />
+
+                        <TextInput 
+
+                        id="facebook_url"
+                        type="text"
+                        className="mt-1 block w-full"
+                        value={data.facebook_url}
+                        onChange={(e) => setData('facebook_url', e.target.value)}                        
+                        />
+                     <InputError className="mt-2" message={errors.facebook_url} />
+
+                    </div>
+
+                    <div>
+
+                    <InputLabel htmlFor="instagram_url" value="Instagram" />
+
+                        <TextInput 
+
+                        id="instagram_url"
+                        type="text"
+                        className="mt-1 block w-full"
+                        value={data.instagram_url}
+                        onChange={(e) => setData('instagram_url', e.target.value)}                        
+                        />
+                     <InputError className="mt-2" message={errors.instagram_url} />
+
+                    </div>
+
+                    <div>
+                    <InputLabel htmlFor="twitter_url" value="Twitter" />
+
+                        <TextInput 
+
+                        id="twitter_url"
+                        type="text"
+                        className="mt-1 block w-full"
+                        value={data.twitter_url}
+                        onChange={(e) => setData('twitter_url', e.target.value)}                        
+                        />
+                     <InputError className="mt-2" message={errors.twitter_url} />
+
+                    </div>
+
+                    <div>
+                    <InputLabel htmlFor="tiktok_url" value="TikTok" />
+
+                        <TextInput 
+
+                        id="tiktok_url"
+                        type="text"
+                        className="mt-1 block w-full"
+                        value={data.tiktok_url}
+                        onChange={(e) => setData('tiktok_url', e.target.value)}                        
+                        />
+                     <InputError className="mt-2" message={errors.tiktok_url} />
+
+                    </div>
 
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing}>Save</PrimaryButton>

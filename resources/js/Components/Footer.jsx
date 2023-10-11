@@ -5,13 +5,17 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import FormatPaintOutlinedIcon from '@mui/icons-material/FormatPaintOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
+import { useState, useEffect } from 'react';
 
 export default function Footer() {
-  const [value, setValue] = React.useState('recents');
+  const [value, setValue] = useState('recents');
+  const [socialMedia, setSocialMedia] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+
 
   return (
     <BottomNavigation sx={{ width: 500, backgroundColor: '#5c210a', margin: 5 }} value={value} onChange={handleChange}>
