@@ -164,6 +164,9 @@ export default function View({ auth, data }) {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             as={TextField}
+                            multiline 
+                            minRows={2}
+                            maxRows={4}
                             helperText={touched.photo_description && errors.photo_description}
                             error={touched.photo_description && Boolean(errors.photo_description)}
                         />
