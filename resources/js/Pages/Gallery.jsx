@@ -387,8 +387,9 @@ export default function Gallery({ auth }) {
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Upload Photo To The Gallery</DialogTitle>
           <DialogContent>
-          <DialogContentText>
-          Simply upload the picture to the gallery and provide a label and description
+          <DialogContentText >
+          Simply upload the picture to the gallery and provide a label and description.
+         Your photos will appear under the <span className="font-medium" style={{color: '#5c210a'}}>photo gallery</span> section on the home page. 
         </DialogContentText>
         <div>
         {modalError && typeof modalError === 'object' && (
