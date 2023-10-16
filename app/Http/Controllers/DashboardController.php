@@ -7,9 +7,13 @@ use App\Models\ContactSubmissionsModel;
 use App\Models\PhotoGallery;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image; // Import the Image facade
+use Illuminate\Support\Facades\Notification;
+use Intervention\Image\Facades\Image; 
 use Intervention\Image\Exception\NotReadableException; // Catches File Exceptions for the Intervention\Image dependency
-use Illuminate\Database\Eloquent\ModelNotFoundException; 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Notifications\NotificationException;
+use App\Notifications\ReplyNotification;
+
 class DashboardController extends Controller
 {
     public function getContactSubmissions()
@@ -67,6 +71,23 @@ public function renderPhotoGallery($photoID) {
     }
 }
 
+public function getContactSubmission($contactID){
+    try{
+        $data = ContactSubmissionsModel::where('id', $contactID)->firstOrFail(); 
+        return Inertia::render('ViewContactSubmission', [
+            'contactID'=>$contactID,
+            'data'=>$data 
+        ]);
+    }
+   
+    catch(\Exception $e){
+        return response()->json(['error'=>'Cannot fetch contact data'], 500);
+    }
+
+    catch(ModelNotFoundException $e){
+        return response()->json(['error'=>'Cannot fetch contact data'], 500);
+    }
+}
 
 public function getPhotoByID($photoID) {
     try{
@@ -84,6 +105,40 @@ public function getPhotoByID($photoID) {
     }
 }
 
+
+
+
+public function respondToCustomer(Request $request, $customerID){
+    try{
+        $customer = ContactSubmissionsModel::findOrFail($customerID);
+        if($request->isJson()){
+            $data = json_decode($request->getContent(), true);
+            $rules = [
+                'message'=>'required'
+            ];
+
+            $messages = [
+                'messages.required'=>'You must send a reply to this person'
+            ];
+
+            $validate = \Validator::make($data, $rules, $messages);
+
+            if($validate->fails()){
+                return response()->json(['error'=>$validate->errors()], 422);
+            }
+            Notification::route('mail', $customer->email)->notify(new ReplyNotification($customer->name, $data));
+            return response()->json(['success'=>'Your reply was sent to '.$customer->name. '. You can delete this submission if you\'d like.']);
+        }
+    }
+    catch(ModelNotFoundException $e){
+        \Log::error('Model Not Found: '.$e->getMessage());
+        return response()->json(['error'=>'Something went wrong, if this persists, please reach out to the pixel perfect team'], 500);
+    }
+    catch(NotificationException $e){
+        \Log::error('Notification Exception: '.$e->getMessage());
+        return response()->json(['error'=>'Something went wrong sending '.$customer->name.' a reply, if this persists, please reach out to the pixel perfect team'], 500);
+    }
+}
 
 
 public function uploadPhotoToGallery(Request $request)

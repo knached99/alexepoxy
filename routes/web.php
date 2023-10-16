@@ -40,6 +40,8 @@ Route::get('/getPhotosFromGallery', [DashboardController::class, 'getPhotosFromG
 Route::middleware('auth')->group(function () {
     Route::get('/gallery', [DashboardController::class, 'displayGallery'])->name('gallery');
     Route::get('/getContactSubmissions', [DashboardController::class, 'getContactSubmissions'])->name('getContactSubmissions');
+    Route::get('/getContactSubmission/{contactID}', [DashboardController::class, 'getContactSubmission'])->name('getContactSubmission');
+    Route::post('/replyToCustomer/{contactID}', [DashboardController::class, 'respondToCustomer'])->name('replyToCustomer');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

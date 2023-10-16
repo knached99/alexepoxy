@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'id'=>random_int(100000, 999999),
             'name'=>'Alex Araujo',
-            'email'=>'alexaaraujo@fairfieldcountyepoxy.com',
+            'email'=>'admin@admin.com', // LIVE alexaaraujo@fairfieldcountyepoxy.com
             'password'=>Hash::make('password')
         ]);
         // \App\Models\User::factory(10)->create();

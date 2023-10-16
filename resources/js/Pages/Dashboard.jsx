@@ -24,7 +24,8 @@ const columns = [
     { id: 'phone_number', label: 'Phone Number', minWidth: 150 },
     { id: 'message', label: 'Message', minWidth: 200 },
     { id: 'created_at', label: 'Created At', minWidth: 170 },
-    {id: 'delete', label: 'Delete', minWidth: 170},
+    {id: 'view', label: 'View Submission', minWidth: 170},
+    {id: 'delete', label: 'Delete Submission', minWidth: 170},
 ];
 
 export default function Dashboard({ auth }) {
@@ -140,6 +141,7 @@ export default function Dashboard({ auth }) {
                                         <TableCell>{row.phone_number}</TableCell>
                                         <TableCell>{row.message}</TableCell>
                                         <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
+                                        <TableCell><a href={`getContactSubmission/${row.id}`}>View</a></TableCell>
                                         <TableCell>
                                            
                                             <Button
