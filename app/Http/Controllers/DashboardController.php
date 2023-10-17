@@ -19,7 +19,7 @@ class DashboardController extends Controller
     public function getContactSubmissions()
 {
     try {
-        $contactSubmissions = ContactSubmissionsModel::select('submissionID', 'name', 'email', 'phone_number', 'message', 'created_at')->get();
+        $contactSubmissions = ContactSubmissionsModel::select('id', 'name', 'email', 'phone_number', 'message', 'created_at')->get();
         // \Log::info($contactSubmissions);
         return response()->json($contactSubmissions);
     } catch (\Exception $e) {
@@ -27,9 +27,9 @@ class DashboardController extends Controller
     }
 }
 
-public function deleteSubmission($submissionID){
+public function deleteSubmission($id){
     try {
-        $delete = ContactSubmissionsModel::destroy($submissionID);
+        $delete = ContactSubmissionsModel::destroy($id);
 
         if ($delete) {
             return response()->json(['success' => 'Submission deleted successfully']);
@@ -74,7 +74,7 @@ public function renderPhotoGallery($photoID) {
 
 public function getContactSubmission($contactID){
     try{
-        $data = ContactSubmissionsModel::where('submissionID', $contactID)->firstOrFail(); 
+        $data = ContactSubmissionsModel::where('id', $contactID)->firstOrFail(); 
         return Inertia::render('ViewContactSubmission', [
             'contactID'=>$contactID,
             'data'=>$data 

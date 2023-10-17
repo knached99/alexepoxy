@@ -19,8 +19,6 @@ class Home extends Controller
             // Decode the JSON content
             $data = json_decode($request->getContent(), true);
 
-            $data['submissionID'] = 'CS'.substr(Str::uuid(), 0, 10);
-
             // Perform validation on the decoded data
             $rules = [
                 'name' => 'required',
@@ -46,26 +44,30 @@ class Home extends Controller
             }
 
             try {
-                // Create record in the database
-                ContactSubmissionsModel::create($data);
-                Notification::route('mail', env('MAIL_FROM_ADDRESS'))->notify(new NotifyContactSubmitted($data));
+
+                $newSubmission = ContactSubmissionsModel::create($data);
+                Notification::route('mail', $data['email'])->notify(new NotifyContactSubmitted($data, $newSubmission->id));
+                
 
                 // Return success response
                 return response()->json(['success' => 'Alex Epoxy has been notified and will reach out to your email ' . $data['email'] . ' soon!']);
             } catch (\Exception $e) {
                 // Return error response
-                \Log::error('Contact Submission General Exception: '.$e->getMessage());
-                return response()->json(['error' => 'Something went wrong submitting this form'], 500);
+                \Log::error('Exception Caught in '.__FUNCTION__. ' Error: '.$e->getMessage().' On line: '.$e->getLine());
+                return response()->json(['error' => 'Something went wrong while trying to send your submission'], 500);
             }
-            catch(NotificationException $e){
-                \Log::error('Contact Submission Notification Exception: '.$e->getMessage());
-                return response()->json(['error' => 'Something went wrong sending an email to Alex Epoxy'], 500);
+            catch(NotificationException $e) {
+                \Log::error('Exception Caught in '.__FUNCTION__. ' Error: '.$e->getMessage().' On line: '.$e->getLine());
+                return response()->json(['error' => 'Something went wrong while trying to send your submission'], 500);
             }
         }
 
         // If the request is not JSON, return an error response
         return response()->json(['error' => 'Invalid request format'], 400);
     }
+
+
+    
 
     public function getSocialMediaLinks(){
         try{

@@ -15,9 +15,11 @@ class NotifyContactSubmitted extends Notification
      * Create a new notification instance.
      */
     public $data;
-    public function __construct(array $data)
+    public $submissionId;
+    public function __construct(array $data, $submissionId)
     {
         $this->data = $data;
+        $this->submissionId = $submissionId;
     }
 
     /**
@@ -42,7 +44,7 @@ class NotifyContactSubmitted extends Notification
                     ->line('Name: '.$this->data['name'])
                     ->line('Email: '.$this->data['email'])
                     ->line('Phone Number: '.$this->data['phone_number'])
-                    ->action('View Customer Message', url('/getContactSubmission'.$data['submissionID']))
+                    ->action('View Customer Message', url('getContactSubmission/'.$this->submissionId))
                     ->line('Please respond back to the customer by sending them an reply from the dashboard');
     }
 
