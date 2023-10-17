@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NotifyContactSubmitted;
 use Illuminate\Notifications\NotificationException;
+use Illuminate\Support\Str;
+
 class Home extends Controller
 {
     public function submitContactForm(Request $request)
@@ -16,6 +18,8 @@ class Home extends Controller
         if ($request->isJson()) {
             // Decode the JSON content
             $data = json_decode($request->getContent(), true);
+
+            $data['submissionID'] = 'CS'.substr(Str::uuid(), 0, 10);
 
             // Perform validation on the decoded data
             $rules = [
@@ -50,10 +54,12 @@ class Home extends Controller
                 return response()->json(['success' => 'Alex Epoxy has been notified and will reach out to your email ' . $data['email'] . ' soon!']);
             } catch (\Exception $e) {
                 // Return error response
+                \Log::error('Contact Submission General Exception: '.$e->getMessage());
                 return response()->json(['error' => 'Something went wrong submitting this form'], 500);
             }
             catch(NotificationException $e){
-                return response()->json(['error' => 'Something went wrong sending an email to the business'], 500);
+                \Log::error('Contact Submission Notification Exception: '.$e->getMessage());
+                return response()->json(['error' => 'Something went wrong sending an email to Alex Epoxy'], 500);
             }
         }
 

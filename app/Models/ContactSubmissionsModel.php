@@ -11,12 +11,15 @@ class ContactSubmissionsModel extends Model
 
     protected $table = 'contact_submissions';
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'submissionID';
 
     protected $fillable = [
+        'submissionID',
         'name',
         'email',
         'phone_number',
         'message'
     ];
+
+    protected $casts = ['submissionID'=>'string'];
 }

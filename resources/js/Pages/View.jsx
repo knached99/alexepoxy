@@ -45,14 +45,6 @@ export default function View({ auth, data }) {
 
 
   
-
-  
-
-    const initialValues = {
-        photo_label: '',
-        photo_description: ''
-    };
-
     const validationLogic = Yup.object().shape({
         photo_label: Yup.string().required("Photo Label is required"),
         photo_description: Yup.string().required("Photo Description is required"),

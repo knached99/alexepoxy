@@ -15,11 +15,13 @@ class ReplyNotification extends Notification
      * Create a new notification instance.
      */
     public $customer; 
+    public $customerMessage;
     public $data; 
 
-    public function __construct(string $customerName, array $data)
+    public function __construct(string $customerName, string $customerMessage, array $data)
     {
         $this->customerName = $customerName;
+        $this->customerMessage = $customerMessage;
         $this->data = $data;
     }
 
@@ -41,7 +43,10 @@ class ReplyNotification extends Notification
         return (new MailMessage)
                     ->subject('Alex Epoxy has responded to your contact submission')
                     ->greeting('Hello '.$this->customerName)
-                    ->line('Alex Epoxy has responded to your contact submission with the message below: ')
+                    ->line('Alex Epoxy has responded to your contact submission.')
+                    ->line('Here is your original message to Alex Epoxy: ')
+                    ->line($this->customerMessage)
+                    ->line('And here is their response: ')
                     ->line($this->data['message']);
     }
 

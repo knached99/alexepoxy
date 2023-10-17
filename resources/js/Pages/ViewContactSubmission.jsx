@@ -79,14 +79,16 @@ export default function ViewContactSubmission({ auth, data }) {
             }
         >
             {data ? (
-               <Container maxWidth="sm" style={{ backgroundColor: 'white', padding: 1, margin: 'auto', textAlign: 'center' }}>
-                     <Card sx={{ minWidth: 275, margin: 10, padding: 4 }}>
+               <Container maxWidth="sm" style={{ backgroundColor: 'inherit', padding: 1, margin: 'auto', textAlign: 'center' }}>
+                <h1 className="text-slate-900 font-bold text-2xl m-5">Message from <span className="text-indigo-500">{data.name}:</span></h1>
+                <p className="break-all text-xl m-3">{data.message}</p>
+                     {/* <Card sx={{ minWidth: 275, margin: 10, padding: 4 }}>
                         <h1 className="text-indigo-500 font-bold">Message from {data.name}</h1>
                     <CardContent>
                     {data.message}
                     </CardContent>
                     
-                    </Card>
+                    </Card> */}
                     <Formik
                         initialValues={initialValues}
                         validationSchema={validationSchema}
@@ -108,7 +110,7 @@ export default function ViewContactSubmission({ auth, data }) {
                                     name="message"
                                     type="text"
                                     label="Write your response..."
-                                    variant="outlined"
+                                    variant="filled"
                                     fullWidth
                                     margin="normal"
                                     onBlur={handleBlur}

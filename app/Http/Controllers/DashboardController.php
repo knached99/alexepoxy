@@ -19,7 +19,7 @@ class DashboardController extends Controller
     public function getContactSubmissions()
 {
     try {
-        $contactSubmissions = ContactSubmissionsModel::select('id', 'name', 'email', 'phone_number', 'message', 'created_at')->get();
+        $contactSubmissions = ContactSubmissionsModel::select('submissionID', 'name', 'email', 'phone_number', 'message', 'created_at')->get();
         // \Log::info($contactSubmissions);
         return response()->json($contactSubmissions);
     } catch (\Exception $e) {
@@ -38,7 +38,8 @@ public function deleteSubmission($submissionID){
         }
     } catch (\Exception $e) {
         // Handle any exceptions that occur during deletion
-        return response()->json(['error' => 'An error occurred while deleting the submission: '.$e->getMessage().' '], 500);
+        \Log::error('Submission Deletion Error: '.$e->getMessage());
+        return response()->json(['error' => 'An error occurred while deleting the submission'], 500);
     }
 }
 
@@ -73,7 +74,7 @@ public function renderPhotoGallery($photoID) {
 
 public function getContactSubmission($contactID){
     try{
-        $data = ContactSubmissionsModel::where('id', $contactID)->firstOrFail(); 
+        $data = ContactSubmissionsModel::where('submissionID', $contactID)->firstOrFail(); 
         return Inertia::render('ViewContactSubmission', [
             'contactID'=>$contactID,
             'data'=>$data 
@@ -126,7 +127,7 @@ public function respondToCustomer(Request $request, $customerID){
             if($validate->fails()){
                 return response()->json(['error'=>$validate->errors()], 422);
             }
-            Notification::route('mail', $customer->email)->notify(new ReplyNotification($customer->name, $data));
+            Notification::route('mail', $customer->email)->notify(new ReplyNotification($customer->name, $customer->message, $data));
             return response()->json(['success'=>'Your reply was sent to '.$customer->name. '. You can delete this submission if you\'d like.']);
         }
     }

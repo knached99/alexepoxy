@@ -42,8 +42,8 @@ class NotifyContactSubmitted extends Notification
                     ->line('Name: '.$this->data['name'])
                     ->line('Email: '.$this->data['email'])
                     ->line('Phone Number: '.$this->data['phone_number'])
-                    ->line('Message: '.$this->data['message'])
-                    ->line('Please respond back to the customer by sending them an email');
+                    ->action('View Customer Message', url('/getContactSubmission'.$data['submissionID']))
+                    ->line('Please respond back to the customer by sending them an reply from the dashboard');
     }
 
     /**
