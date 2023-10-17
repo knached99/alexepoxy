@@ -154,7 +154,7 @@ export default function Home({auth}){
 
  
 
-    <section className="bg-gray-50">
+    <section id="about-us" className="bg-gray-50">
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div className="max-w-screen-md mb-8 lg:mb-16">
                 <h2 className="mb-4 text-4xl font-extrabold text-amber-900 ">About Our Company</h2>
@@ -212,7 +212,7 @@ export default function Home({auth}){
 
     {/* GALLERY SECTION */}
 
-    <div>
+    <section id="epoxy-gallery">
       <h1 className="text-4xl text-center m-4 font-black text-amber-900">Photo Gallery</h1>
 
       <div className="gallery">
@@ -263,11 +263,11 @@ export default function Home({auth}){
 )}
 
 
-    </div>
+    </section>
   
    
 
-      <section className="bg-white ">
+      <section className="bg-white" id="contact-us">
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div className="mx-auto max-w-screen-sm text-center">
                 <h2 className="mb-4 text-4xl font-extrabold leading-tight text-amber-900">Ready to dive into the world of stunning epoxy creations?</h2>

@@ -10,64 +10,51 @@ import List from '@mui/material/List';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import {Link} from "@inertiajs/react";
-import Tooltip from '@mui/material/Tooltip';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import FormatPaintOutlinedIcon from '@mui/icons-material/FormatPaintOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import MailOutlinedIcon from '@mui/icons-material/MailOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
+
 const drawerWidth = 240;
 
-function DrawerAppBar(props) {
-  const { window, auth } = props;
+const DrawerAppBar = ({ window, auth }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    handleDrawerToggle();
+  };
+
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }} >
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
         Alex's Epoxy
       </Typography>
       <Divider />
       <List>
-        
-        <Link to="#" className="block p-5 py-2 pr-4 pl-3">
-        Home 
-        </Link>
-
-        <Link to="#about-us" className="block p-5 py-2 pr-4 pl-3">
-          About Us
-        </Link>
-
-        <Link to="#epoxy-gallery" className="block p-5 py-2 pr-4 pl-3">
-          Epoxy Gallery 
-        </Link>
-
-        <Link to="#contact-us" className="block p-5 py-2 pr-4 pl-3">
-          Contact Us 
-        </Link>
-        {props.auth && props.auth.user ? (
-  <Link
-    href={route('dashboard')}
-    className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-  >
-    Dashboard
-  </Link>
-) : (
-  <>
-    <Link
-      href={route('login')}
-      className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-    >
-      Log in
-    </Link>
-  </>
-)}
+        {auth && auth.user ? (
+          <a
+            href={route('dashboard')}
+            onClick={scrollToTop}
+            className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+          >
+            Dashboard
+          </a>
+        ) : (
+          <a
+            href={route('login')}
+            onClick={scrollToTop}
+            className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+          >
+            Log in
+          </a>
+        )}
       </List>
     </Box>
   );
@@ -77,7 +64,7 @@ function DrawerAppBar(props) {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav" sx={{backgroundColor: '#5c210a'}}>
+      <AppBar component="nav" sx={{ backgroundColor: '#5c210a' }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -93,55 +80,38 @@ function DrawerAppBar(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-             Alex's Epoxy
+            Alex's Epoxy
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-           
-            <Tooltip title="Home">
-            <Link to="#" className="p-5 py-2 pr-4 pl-3">
-            <HomeOutlinedIcon sx={{ color: '#fff' }} />
-            </Link>
-            </Tooltip>
-
-            <Tooltip title="About Us">
-            <Link to="#about-us" className="p-5 py-2 pr-4 pl-3">
-              <FormatPaintOutlinedIcon className="w-9 h-9" sx={{color: '#fff'}}/>
-            </Link>
-            </Tooltip>
-
-            <Tooltip title="Epoxy Gallery">
-              <Link to="#epoxy-gallery" className="p-5 py-2 pr-4 pl-3">
-              <CollectionsOutlinedIcon className="w-9 h-9" sx={{color: '#fff'}}/>
-              </Link>
-            </Tooltip>
-            
-            <Tooltip title="Contact Us">
-              <Link to="#contact-us" className="p-5 py-2 pr-4 pl-3">
-                <MailOutlinedIcon className="w-9 h-9" sx={{color: '#fff'}}/>
-              </Link>
-            </Tooltip>
-
+            <a href="/" onClick={scrollToTop} className="p-5 py-2 pr-4 pl-3">
+              <HomeOutlinedIcon sx={{ color: '#fff' }} />
+            </a>
+            <a href="#about-us" onClick={scrollToTop} className="p-5 py-2 pr-4 pl-3">
+              <FormatPaintOutlinedIcon className="w-9 h-9" sx={{ color: '#fff' }} />
+            </a>
+            <a href="#epoxy-gallery" onClick={scrollToTop} className="p-5 py-2 pr-4 pl-3">
+              <CollectionsOutlinedIcon className="w-9 h-9" sx={{ color: '#fff' }} />
+            </a>
+            <a href="#contact-us" onClick={scrollToTop} className="p-5 py-2 pr-4 pl-3">
+              <MailOutlinedIcon className="w-9 h-9" sx={{ color: '#fff' }} />
+            </a>
             {auth && auth.user ? (
-            <Tooltip title="Go to your dashboard">
-            <Link
-              href={route('dashboard')}
-              className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-            >
-              <DashboardOutlinedIcon className="w-9 h-9" sx={{color: '#fff'}}/>
-            </Link>
-            </Tooltip>
-          ) : (
-            <>
-            <Tooltip title="Login to your account">
-              <Link
-                href={route('login')}
+              <a
+                href={route('dashboard')}
+                onClick={scrollToTop}
                 className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
               >
-                <LoginOutlinedIcon className="w-9 h-9" sx={{color: '#fff'}} />
-              </Link>
-              </Tooltip>
-            </>
-          )}
+                <DashboardOutlinedIcon className="w-9 h-9" sx={{ color: '#fff' }} />
+              </a>
+            ) : (
+              <a
+                href={route('login')}
+                onClick={scrollToTop}
+                className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+              >
+                <LoginOutlinedIcon className="w-9 h-9" sx={{ color: '#fff' }} />
+              </a>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
@@ -152,7 +122,7 @@ function DrawerAppBar(props) {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
@@ -164,13 +134,9 @@ function DrawerAppBar(props) {
       </nav>
     </Box>
   );
-}
+};
 
 DrawerAppBar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
 };
 
