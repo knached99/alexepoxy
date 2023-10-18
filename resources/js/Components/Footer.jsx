@@ -26,10 +26,9 @@ export default function Footer() {
     const getData = async () => {
       try {
         const response = await axios.get('/getSocialMediaLinks');
-        console.log('Social Media Data:', response.data);
+        console.log(response.data[0]);
         setSocialMedia(response.data[0]); // Assuming there's only one object in the array
       } catch (error) {
-        console.error('Error fetching social media links:', error);
         setError(error);
       } finally {
         setLoading(false);
@@ -45,8 +44,10 @@ export default function Footer() {
   return (
     <>
       {loading ? (
-        <p className='text-white'>Loading...</p>
-      ) : (
+  <p className='text-white'>Loading...</p>
+) : error ? (
+  <p className='text-red-100 font-medium text-xl'>Error retrieving social media links</p>
+) : (
         <>
           <p className='text-white m-5 font-medium text-center text-xl'>Follow Us On Social Media</p>
           <BottomNavigation

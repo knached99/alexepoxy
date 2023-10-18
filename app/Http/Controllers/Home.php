@@ -76,7 +76,7 @@ class Home extends Controller
         }
         catch(\Exception $e){
             \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
-            return response()->json(['error' => 'Something went wrong while trying to get social media links'], 500);
+            return response()->json(['error' => 'Error retrieving social media links'], 500);
         }
     }
 
