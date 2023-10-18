@@ -38,11 +38,24 @@ const DrawerAppBar = ({ window, auth }) => {
       </Typography>
       <Divider />
       <List>
+      <a href="/" onClick={scrollToTop} className="block m-5 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+            Home
+            </a>
+            <a href="#about-us" onClick={scrollToTop} className="block m-5 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+            About Us
+            </a>
+            <a href="#epoxy-gallery" onClick={scrollToTop} className="block m-5 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+            Photo Gallery 
+           </a>
+            <a href="#contact-us" onClick={scrollToTop} className="block m-5 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+            Contact Us
+            </a>
+
         {auth && auth.user ? (
           <a
             href={route('dashboard')}
             onClick={scrollToTop}
-            className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+            className="block m-5 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
           >
             Dashboard
           </a>
@@ -50,11 +63,14 @@ const DrawerAppBar = ({ window, auth }) => {
           <a
             href={route('login')}
             onClick={scrollToTop}
-            className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+            className="block m-5 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
           >
             Log in
           </a>
         )}
+
+
+
       </List>
     </Box>
   );
