@@ -53,11 +53,11 @@ class Home extends Controller
                 return response()->json(['success' => 'Alex Epoxy has been notified and will reach out to your email ' . $data['email'] . ' soon!']);
             } catch (\Exception $e) {
                 // Return error response
-                \Log::error('Exception Caught in '.__FUNCTION__. ' Error: '.$e->getMessage().' On line: '.$e->getLine());
+                \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
                 return response()->json(['error' => 'Something went wrong while trying to send your submission'], 500);
             }
             catch(NotificationException $e) {
-                \Log::error('Exception Caught in '.__FUNCTION__. ' Error: '.$e->getMessage().' On line: '.$e->getLine());
+                \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
                 return response()->json(['error' => 'Something went wrong while trying to send your submission'], 500);
             }
         }
@@ -75,7 +75,8 @@ class Home extends Controller
             return response()->json($socialMediaLinks);
         }
         catch(\Exception $e){
-            \Log::error('Unable to get social media links: '.$e->getMessage());
+            \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
+            return response()->json(['error' => 'Something went wrong while trying to get social media links'], 500);
         }
     }
 

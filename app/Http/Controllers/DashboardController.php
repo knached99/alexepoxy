@@ -23,6 +23,7 @@ class DashboardController extends Controller
         // \Log::info($contactSubmissions);
         return response()->json($contactSubmissions);
     } catch (\Exception $e) {
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error' => $e->getMessage()], 500);
     }
 }
@@ -38,7 +39,7 @@ public function deleteSubmission($id){
         }
     } catch (\Exception $e) {
         // Handle any exceptions that occur during deletion
-        \Log::error('Submission Deletion Error: '.$e->getMessage());
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error' => 'An error occurred while deleting the submission'], 500);
     }
 }
@@ -53,6 +54,7 @@ public function getPhotosFromGallery(){
         return response()->json($photos);
     }
     catch(\Exception $e){
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error' => 'Something went wrong getting the photos from the gallery'], 500);
     }
 }
@@ -65,9 +67,11 @@ public function renderPhotoGallery($photoID) {
             'data' => $data, 
         ]);
     } catch (\Exception $e) {
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error' => 'Something went wrong getting that photo from the gallery'], 500);
     }
     catch(ModelNotFoundException $e){
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error'=>'Cannot get that photo, it may not exist or you may have deleted it']);
     }
 }
@@ -96,13 +100,13 @@ public function getPhotoByID($photoID) {
         return response()->json($data);
     }
     catch(\Exception $e){
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error'=>'Something went wrong getting new content'], 500);
-        \Log::error('Exception Caught: '.$e->getMessage());
     }
 
     catch(ModelNotFoundException $e){
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error'=>'Something went wrong getting new content'], 500);
-        \Log::error('Exception Caught: '.$e->getMessage());
     }
 }
 
@@ -132,11 +136,11 @@ public function respondToCustomer(Request $request, $customerID){
         }
     }
     catch(ModelNotFoundException $e){
-        \Log::error('Model Not Found: '.$e->getMessage());
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error'=>'Something went wrong, if this persists, please reach out to the pixel perfect team'], 500);
     }
     catch(NotificationException $e){
-        \Log::error('Notification Exception: '.$e->getMessage());
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error'=>'Something went wrong sending '.$customer->name.' a reply, if this persists, please reach out to the pixel perfect team'], 500);
     }
 }
@@ -188,10 +192,10 @@ public function uploadPhotoToGallery(Request $request)
     
         return response()->json(['success' => 'Photo uploaded to the gallery']);
     } catch (\Exception $e) {
-        \Log::error('Exception: ' . $e->getMessage());
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error' => 'Something went wrong uploading the photo to the gallery']);
     } catch (NotReadableException $e) {
-        \Log::error('Image Intervention Exception: ' . $e->getMessage());
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error', 'Something went wrong uploading that photo to the gallery.']);
     }
 }
@@ -212,9 +216,11 @@ public function editPhoto(Request $request, $photoID){
         return response()->json(['success'=>'Your changes were saved']);
     }
     catch(\Exception $e){
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error'=>'Something went wrong editing this content']);
     }
     catch(ModelNotFoundException $e){
+        \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
         return response()->json(['error'=>'Something went wrong editing this content']);
     }
 }
@@ -235,6 +241,7 @@ public function deletePhotoFromGallery($photoID){
         }
     }
         catch(\Exception $e){
+            \Log::error('Exception Caught in: '.__FUNCTION__.' On Line: '.$e->getLine().' Error Message: '.$e->getMessage());
             return response()->json(['error'=> 'An error occurred while deleting that photo'], 500);
         }
     
