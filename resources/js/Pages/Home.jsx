@@ -48,6 +48,16 @@ export default function Home({auth}){
     message: Yup.string().required('Message is required'),
   });
 
+  const formatPhoneNumber = (input) => {
+    console.log('Input:', input);
+    const cleanedInput = input.replace(/-/g, '');
+    console.log('Cleaned Input:', cleanedInput);
+    if (cleanedInput.length <= 3) return cleanedInput;
+    if (cleanedInput.length <= 6) return `${cleanedInput.slice(0, 3)}-${cleanedInput.slice(3)}`;
+    return `${cleanedInput.slice(0, 3)}-${cleanedInput.slice(3, 6)}-${cleanedInput.slice(6, 10)}`;
+  };
+
+
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
@@ -317,18 +327,32 @@ export default function Home({auth}){
         autoComplete="off"
       />
 
-      <Field
-        name="phone_number"
-        type="text"
-        label="Phone Number"
-        variant="standard"
-        fullWidth
-        margin="normal"
-        as={TextField}
-        helperText={touched.phone_number && errors.phone_number}
-        error={touched.phone_number && Boolean(errors.phone_number)}
-        autoComplete="off"
-      />
+<Field
+  name="phone_number"
+  type="text"
+  label="Phone Number"
+  variant="standard"
+  fullWidth
+  margin="normal"
+  as={TextField}
+  helperText={touched.phone_number && errors.phone_number}
+  error={touched.phone_number && Boolean(errors.phone_number)}
+  onChange={(e) => {
+    // Format phone number on input change
+    const formattedValue = formatPhoneNumber(e.target.value);
+    // Call handleChange with the formatted value
+    handleChange({
+      target: {
+        name: 'phone_number',
+        value: formattedValue,
+      },
+    });
+  }}
+  onBlur={handleBlur}
+  autoComplete="off"
+/>
+
+
 
       <Field
         name="message"
