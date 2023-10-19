@@ -30,7 +30,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
                 <p className="mt-1 text-sm text-gray-600">
                     Update your account's profile information, email address, and social media accounts.
-                    Your social media links will appear on the homepage on the footer.
+                    Your social media links will appear in the footer on the homepage.
                 </p>
             </header>
 
