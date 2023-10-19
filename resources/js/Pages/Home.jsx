@@ -49,9 +49,7 @@ export default function Home({auth}){
   });
 
   const formatPhoneNumber = (input) => {
-    console.log('Input:', input);
     const cleanedInput = input.replace(/-/g, '');
-    console.log('Cleaned Input:', cleanedInput);
     if (cleanedInput.length <= 3) return cleanedInput;
     if (cleanedInput.length <= 6) return `${cleanedInput.slice(0, 3)}-${cleanedInput.slice(3)}`;
     return `${cleanedInput.slice(0, 3)}-${cleanedInput.slice(3, 6)}-${cleanedInput.slice(6, 10)}`;

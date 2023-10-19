@@ -38,7 +38,7 @@ export default function ViewContactSubmission({ auth, data }) {
             const response = await axios.get(`/getContactSubmission/${contactID}`);
             setContactData(response.data);
         } catch (error) {
-            console.error('Error fetching data:', error);
+
         } finally {
             setIsLoading(false);
         }

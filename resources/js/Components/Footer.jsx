@@ -26,7 +26,6 @@ export default function Footer() {
     const getData = async () => {
       try {
         const response = await axios.get('/getSocialMediaLinks');
-        console.log(response.data[0]);
         setSocialMedia(response.data[0]); // Assuming there's only one object in the array
       } catch (error) {
         setError(error);

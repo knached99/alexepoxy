@@ -90,7 +90,6 @@ export default function Dashboard({ auth }) {
             setError(toast.error(errorMessage));
           }
         } catch (error) {
-          console.log('Error deleting submission:', error);
           setError(toast.error('An error occurred while deleting the submission.'));
         } 
       };

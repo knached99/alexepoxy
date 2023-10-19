@@ -91,7 +91,6 @@ export default function Gallery({ auth }) {
         setRows(response.data);
         setLoading(false);
       } catch (error) {
-        console.error(`Error Fetching data: ${error}`);
         setError(toast.error(error.message));
         setLoading(false);
       }
@@ -129,7 +128,7 @@ export default function Gallery({ auth }) {
         setError(toast.error(errorMessage));
       }
     } catch (error) {
-      console.log('Error deleting picture:', error);
+    
       setError(toast.error('An error occurred while deleting that picture from the gallery.'));
     }
   };
@@ -149,110 +148,6 @@ export default function Gallery({ auth }) {
   };
   
   
-
-
-  // const uploadPhoto = async (values) => {
-  //   try {
-  //     const response = await axios.post('/uploadPhotoToGallery', values, {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-  
-  //     if (response.status === 200) {
-  //       // Success: Clear the form or show a success message.
-  //       console.log('Photo uploaded successfully');
-  //       setPreviewImage(null); // Clear the image preview
-  //     } else {
-  //       // Handle other server errors as needed.
-  //       setModalError(`Server Error: ${response.status}`);
-  //       console.error('Server error:', response.status);
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 422) {
-  //       // Validation errors: Display the errors on the form.
-  //       const validationErrors = error.response.data.error;
-  //       setModalError(validationErrors); // Set Formik errors
-  //     } else {
-  //       console.error('Validation Error:', validationErrors);
-  //     }
-  //   }
-  // };
-
-  // const uploadPhoto = async (values) => {
-  //   try {
-  //     if (!values.photo) {
-  //       setModalError('Photo is required');
-  //       return;
-  //     }
-  
-  //     const response = await axios.post('/uploadPhotoToGallery', values, {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-  
-  //     if (response.status === 200) {
-  //       // Success: Clear the form or show a success message.
-  //       console.log('Photo uploaded successfully');
-  //       setPreviewImage(null); // Clear the image preview
-  //     } else {
-  //       // Handle other server errors as needed.
-  //       setModalError(`Server Error: ${response.status}`);
-  //       console.error('Server error:', response.status);
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 422) {
-  //       // Validation errors: Display the errors on the form.
-  //       const validationErrors = error.response.data.error;
-  //       setModalError(validationErrors); // Set Formik errors
-  //     } else {
-  //       console.error('Error uploading photo:', error);
-  //       setModalError('An error occurred while uploading the photo.');
-  //     }
-  //   }
-  // };
-  
-  
-  // const uploadPhoto = async (values) => {
-  //   try {
-  //     if (!values.photo) {
-  //       setModalError('Photo is required');
-  //       return;
-  //     }
-  
-  //     const formData = new FormData();
-  //     formData.append('photo', values.photo);
-  //     formData.append('photo_label', values.photo_label);
-  //     formData.append('photo_description', values.photo_description);
-  
-  //     const response = await axios.post('/uploadPhotoToGallery', formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data', // Important: Set the content type to multipart/form-data
-  //       },
-  //     });
-  
-  //     if (response.status === 200) {
-  //       // Success: Clear the form or show a success message.
-  //       setOpen(false);
-  //       setSuccess(toast.success(response.data.success));
-  //       setPreviewImage(null); // Clear the image preview
-  //     } else {
-  //       // Handle other server errors as needed.
-  //       setModalError(`Server Error: ${response.status}`);
-  //       console.error('Server error:', response.status);
-  //     }
-  //   } catch (error) {
-  //     if (error.response && error.response.status === 422) {
-  //       // Validation errors: Display the errors on the form.
-  //       const validationErrors = error.response.data.error;
-  //       setModalError(validationErrors); // Set Formik errors
-  //     } else {
-  //       console.error('Error uploading photo:', error);
-  //       setModalError('An error occurred while uploading the photo.');
-  //     }
-  //   }
-  // };
 
   const uploadPhoto = async (values) => {
     try {
@@ -283,7 +178,6 @@ export default function Gallery({ auth }) {
       } else {
         // Handle other server errors as needed.
         setModalError(`Server Error: ${response.status}`);
-        console.error('Server error:', response.status);
       }
     } catch (error) {
       if (error.response && error.response.status === 422) {
@@ -291,7 +185,6 @@ export default function Gallery({ auth }) {
         const validationErrors = error.response.data.error;
         setModalError(validationErrors); // Set Formik errors
       } else {
-        console.error('Error uploading photo:', error);
         setModalError('An error occurred while uploading the photo.');
       }
     }

@@ -28,8 +28,8 @@ export default function View({ auth, data }) {
           const response = await axios.get(`/getPhotoByID/${photoID}`);
           setPhotoData(response.data);
       } catch (error) {
-          console.error('Error fetching data:', error);
-      } finally {
+
+    } finally {
           setIsLoading(false);
       }
   };
