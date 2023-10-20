@@ -74,6 +74,7 @@ export default function View({ auth, data }) {
           if (response.data.success) {
               handleToast('success', response.data.success);
               setIsEditSuccess(true);
+            
           } else {
               handleToast('error', response.data.error);
           }

@@ -59,6 +59,10 @@ export default function ViewContactSubmission({ auth, data }) {
             if (response.data.success) {
                 toast.success(response.data.success);
                 setIsEditSuccess(true);
+                Object.keys(values).forEach((key) => {
+                 values[key] = ''; // Clear form out 
+                }); 
+
             } else {
                 toast.error(response.data.error);
             }

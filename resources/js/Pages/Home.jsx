@@ -106,18 +106,20 @@ export default function Home({auth}){
     }
   };
 
-   const handleSubmit = async (values, { setSubmitting }) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axios.post('/submitContactForm', values, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-
+  
       if (response.data.success) {
         handleToast('success', response.data.success);
-         // Reset the form values
-        
+        // Reset the form values
+        Object.keys(values).forEach((key) => {
+          values[key] = ''; // Set each form field to an empty string
+        });
       } else {
         handleToast('error', response.data.error);
       }
@@ -127,7 +129,7 @@ export default function Home({auth}){
       setSubmitting(false);
     }
   };
-
+  
 
 
     const openLightbox = (src, label, description) => {
