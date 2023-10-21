@@ -14,7 +14,7 @@ export default function Footer() {
   const [socialMedia, setSocialMedia] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedLink, setSelectedLink] = useState(null);
- 
+
   const handleLinkClick = (link) => {
     if (link) {
       window.open(link, '_blank');
@@ -36,8 +36,8 @@ export default function Footer() {
 
     getData();
   }, []);
-  
-  
+
+
 
 
   return (
@@ -56,7 +56,7 @@ export default function Footer() {
             setValue(newValue);
           }}
           sx={{
-            backgroundColor: '#5c210a',
+            backgroundColor: '#000000',
             position: 'relative',
             bottom: 0,
             width: '100%',
@@ -64,7 +64,7 @@ export default function Footer() {
             "& .Mui-selected": {
               borderBottomColor: 'white',
               borderBottomWidth: 4,
-              color: 'white', 
+              color: 'white',
             },
           }}
         >
@@ -105,7 +105,7 @@ export default function Footer() {
       )}
     </>
   );
-  
-  
-  
+
+
+
 };

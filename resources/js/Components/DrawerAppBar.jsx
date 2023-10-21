@@ -34,7 +34,7 @@ const DrawerAppBar = ({ window, auth }) => {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        Alex's Epoxy
+       Fairfield County Epoxy
       </Typography>
       <Divider />
       <List>
@@ -45,7 +45,7 @@ const DrawerAppBar = ({ window, auth }) => {
             About Us
             </a>
             <a href="#epoxy-gallery" onClick={scrollToTop} className="block m-5 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
-            Photo Gallery 
+            Photo Gallery
            </a>
             <a href="#contact-us" onClick={scrollToTop} className="block m-5 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
             Contact Us
@@ -80,7 +80,7 @@ const DrawerAppBar = ({ window, auth }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav" sx={{ backgroundColor: '#5c210a' }}>
+      <AppBar component="nav" sx={{ backgroundColor: '#000000' }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -96,7 +96,7 @@ const DrawerAppBar = ({ window, auth }) => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            Alex's Epoxy
+          Fairfield County Epoxy
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <a href="/" onClick={scrollToTop} className="p-5 py-2 pr-4 pl-3">

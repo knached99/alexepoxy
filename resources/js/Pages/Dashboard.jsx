@@ -42,7 +42,7 @@ export default function Dashboard({ auth }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                
+
                 const response = await fetch('/getContactSubmissions');
                 if (!response.ok) {
                     throw new Error(`Failed to fetch data: ${response.statusText}`);
@@ -71,15 +71,15 @@ export default function Dashboard({ auth }) {
     };
     const deleteSubmission = async (submissionId, index) => {
         // Set loading state for the specific row
-      
+
         try {
           // Make a DELETE request using Axios
           const response = await axios.delete(`/deleteSubmission/${submissionId}`);
-      
+
           if (response.status === 200) {
             // Submission deleted successfully
             setSuccess(toast.success(response.data.success));
-      
+
             // Remove the deleted submission from the 'submissions' state
             setSubmissions((prevSubmissions) =>
               prevSubmissions.filter((submission) => submission.id !== submissionId)
@@ -91,23 +91,23 @@ export default function Dashboard({ auth }) {
           }
         } catch (error) {
           setError(toast.error('An error occurred while deleting the submission.'));
-        } 
+        }
       };
-      
-    
-    
-    
-    
+
+
+
+
+
 
     return (
-        
+
         <AuthenticatedLayout
             user={auth.user}
             header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>}
         >
             <meta name="csrf-token" content="{{ csrf_token() }}" />
             <Head title="Dashboard" />
-            
+
 
 
             <div className="py-12">
@@ -140,9 +140,16 @@ export default function Dashboard({ auth }) {
                                         <TableCell>{row.phone_number}</TableCell>
                                         <TableCell>{row.message}</TableCell>
                                         <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
-                                        <TableCell><a href={`getContactSubmission/${row.id}`}>View</a></TableCell>
                                         <TableCell>
-                                           
+                                            <Button
+                                                variant="contained"
+                                                style={{backgroundColor: '#16a34a', textTransform: 'lowercase'}}
+                                            >
+                                            <a href={`getContactSubmission/${row.id}`}>View</a>
+
+                                            </Button></TableCell>
+                                        <TableCell>
+
                                             <Button
                                                 variant="contained"
                                                 style={{backgroundColor: '#f50057', textTransform: 'lowercase'}}
@@ -167,7 +174,7 @@ export default function Dashboard({ auth }) {
                               onRowsPerPageChange={handleChangeRowsPerPage}
                           />
                       </Paper>
-                      
+
                         )}
                         {/* End Section */}
                         <ToastContainer/>
