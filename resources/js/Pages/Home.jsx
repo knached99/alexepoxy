@@ -147,7 +147,6 @@ export default function Home({auth}){
       return (
         <>
         <Head title="Home"/>
-        <body>
     <header>
     <DrawerAppBar auth={auth}/>
     </header>
@@ -422,7 +421,6 @@ export default function Home({auth}){
   
     
     <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
-</body>
         </>
     );
 }
