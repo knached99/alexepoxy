@@ -374,7 +374,7 @@ export default function Home({auth}){
                                 variant="contained"
                                 style={{
                                 color: 'white',
-                                backgroundColor: isSubmitting || !isValid || !dirty ? 'grey' : '#l66534',
+                                backgroundColor: isSubmitting || !isValid || !dirty ? '#l66534' : '#000',
                                 padding: 10,
                                 marginTop: 10,
                                 }}
