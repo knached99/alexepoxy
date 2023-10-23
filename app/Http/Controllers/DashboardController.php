@@ -80,19 +80,20 @@ public function getContactSubmission($contactID){
     try{
         $data = ContactSubmissionsModel::where('id', $contactID)->firstOrFail(); 
         return Inertia::render('ViewContactSubmission', [
-            'contactID'=>$contactID,
-            'data'=>$data 
+            'contactID' => $contactID,
+            'data' => $data 
         ]);
-    }
-   
-    catch(\Exception $e){
-        return response()->json(['error'=>'Cannot fetch contact data'], 500);
     }
 
     catch(ModelNotFoundException $e){
-        return response()->json(['error'=>'Cannot fetch contact data'], 500);
+        return response()->json(['error'=>'Could not find that submission, you may have deleted it'], 500);
+    }
+   
+    catch(\Exception $e){
+        return response()->json(['error' => 'Cannot fetch contact data'], 500);
     }
 }
+
 
 public function getPhotoByID($photoID) {
     try{

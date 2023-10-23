@@ -5,14 +5,16 @@ import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
 
 const validationSchema = Yup.object().shape({
     message: Yup.string().required('Message is required'),
@@ -23,6 +25,7 @@ export default function ViewContactSubmission({ auth, data }) {
     const [isEditSuccess, setIsEditSuccess] = useState(false); // Add this line
     const [toastMessage, setToastMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
 
     useEffect(() => {
@@ -38,7 +41,7 @@ export default function ViewContactSubmission({ auth, data }) {
             const response = await axios.get(`/getContactSubmission/${contactID}`);
             setContactData(response.data);
         } catch (error) {
-
+            setError(error.message);
         } finally {
             setIsLoading(false);
         }
@@ -82,6 +85,32 @@ export default function ViewContactSubmission({ auth, data }) {
                 </h2>
             }
         >
+
+{error ? (
+    <Box sx={{ width: '100%' }}>
+        <Collapse in={open}>
+            <Alert
+                action={
+                    <IconButton
+                        aria-label="close"
+                        color="inherit"
+                        size="small"
+                        onClick={() => {
+                            setOpen(false);
+                        }}
+                    >
+                        <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                }
+                sx={{ mb: 2 }}
+            >
+                {error} {/* Access the error message */}
+            </Alert>
+        </Collapse>
+    </Box>
+) : null}
+
+            
             {data ? (
                <Container maxWidth="sm" style={{ backgroundColor: 'inherit', padding: 1, margin: 'auto', textAlign: 'center' }}>
                 <h1 className="text-slate-900 font-bold text-2xl m-5">Message from <span className="text-indigo-500">{data.name}:</span></h1>

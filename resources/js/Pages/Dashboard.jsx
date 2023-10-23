@@ -12,6 +12,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 
+
 // Import third party dependencies
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -28,14 +29,11 @@ const columns = [
     {id: 'delete', label: 'Delete Submission', minWidth: 170},
 ];
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ auth, errorFlash}) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
-    const [deleteLoading, setDeleteLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
-    const [loadingRows, setLoadingRows] = useState([]);
+    const [open, setOpen] = useState(true);
     const [submissions, setSubmissions] = useState([]);
     const [rows, setRows] = useState([]);
 
@@ -113,6 +111,7 @@ export default function Dashboard({ auth }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                   
                         {/* Table Section */}
                         {loading ? (
                             <div className="flex items-center justify-center h-40">
