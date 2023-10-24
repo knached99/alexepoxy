@@ -245,7 +245,7 @@ export default function Gallery({ auth }) {
                             <TableCell>{row.photo_description}</TableCell>
                             <TableCell>{new Date(row.created_at).toLocaleString()}</TableCell>
                             <TableCell>
-                            <a href={`/photo/${row.id}/view`}>View</a>
+                            <a className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded" href={`/photo/${row.id}/view`}>View</a>
 
                             </TableCell>
 
