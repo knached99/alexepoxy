@@ -10,7 +10,6 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
@@ -25,8 +24,18 @@ export default function ViewContactSubmission({ auth, data }) {
     const [isEditSuccess, setIsEditSuccess] = useState(false); // Add this line
     const [toastMessage, setToastMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
-
+    const [flashError, setFlashError] = useState(null);
+    
+    const getContactSubmission = async (contactID) => {
+        try {
+            const response = await axios.get(`/getContactSubmission/${contactID}`);
+            setContactData(response.data);
+        } catch (error) {
+           // DO NOTHING 
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (isEditSuccess) {
@@ -36,16 +45,7 @@ export default function ViewContactSubmission({ auth, data }) {
         }
     }, [isEditSuccess, data.id]);
 
-    const getContactSubmission = async (contactID) => {
-        try {
-            const response = await axios.get(`/getContactSubmission/${contactID}`);
-            setContactData(response.data);
-        } catch (error) {
-            setError(error.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+  
 
     const initialValues = {
         message: '',
@@ -85,30 +85,6 @@ export default function ViewContactSubmission({ auth, data }) {
                 </h2>
             }
         >
-
-{error ? (
-    <Box sx={{ width: '100%' }}>
-        <Collapse in={open}>
-            <Alert
-                action={
-                    <IconButton
-                        aria-label="close"
-                        color="inherit"
-                        size="small"
-                        onClick={() => {
-                            setOpen(false);
-                        }}
-                    >
-                        <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                }
-                sx={{ mb: 2 }}
-            >
-                {error} {/* Access the error message */}
-            </Alert>
-        </Collapse>
-    </Box>
-) : null}
 
             
             {data ? (

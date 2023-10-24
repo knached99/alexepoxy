@@ -29,7 +29,7 @@ const columns = [
     {id: 'delete', label: 'Delete Submission', minWidth: 170},
 ];
 
-export default function Dashboard({ auth, errorFlash}) {
+export default function Dashboard({ auth}) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [loading, setLoading] = useState(true);
@@ -57,7 +57,7 @@ export default function Dashboard({ auth, errorFlash}) {
         };
 
         fetchData();
-    }, [submissions]);
+    }, [rows]);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -67,30 +67,53 @@ export default function Dashboard({ auth, errorFlash}) {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    const deleteSubmission = async (submissionId, index) => {
-        // Set loading state for the specific row
+    // const deleteSubmission = async (submissionId) => {
+    //     try {
+    //       // Make a DELETE request using Axios
+    //       const response = await axios.delete(`/deleteSubmission/${submissionId}`);
 
+    //       if (response.status === 200) {
+    //         // Submission deleted successfully
+    //         setSuccess(toast.success(response.data.success));
+
+    //         // Remove the deleted submission from the 'submissions' state
+    //         setSubmissions((prevSubmissions) =>
+    //         prevSubmissions.filter((submission) => submission.id !== submissionId)
+    //       );
+
+    //       } else {
+    //         // Handle the error case
+    //         const errorMessage = response.data.error || 'An error occurred while deleting the submission.';
+    //         setError(errorMessage);
+    //       }
+    //     } catch (error) {
+    //       console.log('Error deleting submission:', error);
+    //       setError('An error occurred while deleting the submission.');
+    //     }
+    //   };
+
+    const deleteSubmission = async (submissionId) => {
         try {
-          // Make a DELETE request using Axios
           const response = await axios.delete(`/deleteSubmission/${submissionId}`);
-
+      
           if (response.status === 200) {
             // Submission deleted successfully
             setSuccess(toast.success(response.data.success));
-
-            // Remove the deleted submission from the 'submissions' state
-            setSubmissions((prevSubmissions) =>
-              prevSubmissions.filter((submission) => submission.id !== submissionId)
-            );
+      
+            // Remove the deleted submission from the 'rows' state
+            setRows((prevRows) => prevRows.filter((row) => row.id !== submissionId));
           } else {
             // Handle the error case
             const errorMessage = response.data.error || 'An error occurred while deleting the submission.';
             setError(toast.error(errorMessage));
           }
         } catch (error) {
-          setError(toast.error('An error occurred while deleting the submission.'));
+          console.log('Error deleting submission:', error);
+          setError('An error occurred while deleting the submission.');
         }
       };
+      
+
 
 
 
